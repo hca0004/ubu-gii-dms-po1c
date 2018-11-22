@@ -10,7 +10,9 @@ public interface Datos {
     /**
      * Default constructor
      */
-	public Datos getInstance();
+	public static Datos getInstance() {
+		return null;
+	}
 	
     public ProductBacklog selectProductBacklog();
     public boolean updateProductBacklog(ProductBacklog productBacklog);
@@ -22,9 +24,9 @@ public interface Datos {
     public SprintBacklog selectSprintBacklog(int id);
     
     public MiembroDeEquipo insertUsuario(MiembroDeEquipo miembroDeEquipo);
-    public List<MiembroDeEquipo> selectMiembrosDeEquipo();
+    public HashMap<String,MiembroDeEquipo> selectMiembrosDeEquipo();
 
-    public List<Requisito> selectRequisitos();
+    public HashMap<Integer,Requisito> selectRequisitos();
     public boolean insertRequisito(Requisito requisito);
     
     public boolean updateTarea();
