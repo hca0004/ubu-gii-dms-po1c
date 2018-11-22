@@ -1,21 +1,27 @@
+
 package kanban;
 
 import java.io.File;
 import java.util.*;
-
-
 
 /**
  * 
  */
 public class CSV implements Datos {
 
-    /**
-     * Default constructor
-     */
+	/**
+	 * Default constructor
+	 */
 	private static Datos csv;
-    private CSV() {
-    }
+
+	private CSV() {
+	}
+
+	public static Datos getInstance() {
+		if (csv == null)
+			csv = new CSV();
+		return csv;
+	}
 
 	@Override
 	public ProductBacklog selectProductBacklog() {
@@ -60,26 +66,27 @@ public class CSV implements Datos {
 	}
 
 	@Override
-	public HashMap<String,MiembroDeEquipo> selectMiembrosDeEquipo() {
+	public HashMap<String, MiembroDeEquipo> selectMiembrosDeEquipo() {
 		File fichero = new File("csv/MiembroDeEquipo.csv");
 		Scanner s = null;
 		ArrayList<String> auxLinea;
-		HashMap<String,MiembroDeEquipo> r=new HashMap<String,MiembroDeEquipo>();
-		
+		HashMap<String, MiembroDeEquipo> r = new HashMap<String, MiembroDeEquipo>();
+
 		try {
 			s = new Scanner(fichero);
 
 			while (s.hasNextLine()) {
-				String linea = s.nextLine(); 	
-				auxLinea=leeLinea(linea); 
+				String linea = s.nextLine();
+				auxLinea = leeLinea(linea);
 				System.out.println(auxLinea);
-				r.put(auxLinea.get(4), new MiembroDeEquipo(auxLinea.get(0),auxLinea.get(1),auxLinea.get(2),auxLinea.get(3),auxLinea.get(4)));
-				
+				r.put(auxLinea.get(4), new MiembroDeEquipo(auxLinea.get(0), auxLinea.get(1), auxLinea.get(2),
+						auxLinea.get(3), auxLinea.get(4)));
+
 			}
 
 		} catch (Exception ex) {
 			System.out.println(ex);
-			r=null;
+			r = null;
 		} finally {
 			try {
 				if (s != null)
@@ -87,12 +94,12 @@ public class CSV implements Datos {
 			} catch (Exception ex2) {
 			}
 		}
-	    
+
 		return r;
 	}
 
 	@Override
-	public HashMap<Integer,Requisito> selectRequisitos() {
+	public HashMap<Integer, Requisito> selectRequisitos() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -109,24 +116,19 @@ public class CSV implements Datos {
 		return false;
 	}
 
-	public static Datos getInstance() {
-		if(csv==null)
-			csv=new CSV();
-		return csv;
-	}
 	private ArrayList<String> leeLinea(String l) {
-		ArrayList<String> r=new ArrayList<String>();
+		ArrayList<String> r = new ArrayList<String>();
 		char[] c;
-		c=l.toCharArray();
-		String aux="";
-		
-		for(Character i : c) {
-			if(i==',') {
+		c = l.toCharArray();
+		String aux = "";
+
+		for (Character i : c) {
+			if (i == ',') {
 				r.add(aux);
-				
-				aux="";
-			}else {
-				aux=aux.concat(i.toString());
+
+				aux = "";
+			} else {
+				aux = aux.concat(i.toString());
 			}
 		}
 		r.add(aux);

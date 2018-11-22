@@ -16,7 +16,7 @@ public class ProductBacklog implements Backlog {
     	tareas = new HashMap<Integer,Tarea>();
     }
 
-    public ProductBacklog getInstance() {
+    public static ProductBacklog getInstance() {
     	if(pb==null)
     		pb=new ProductBacklog();
     	return pb;	

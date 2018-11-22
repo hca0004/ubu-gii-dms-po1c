@@ -7,7 +7,6 @@ import java.util.*;
  */
 public class Modelo {
 
-	
 	private ProductBacklog pb;
 	private SprintBacklog sb;
 	private List<SprintBacklog> formersb;
@@ -20,6 +19,12 @@ public class Modelo {
      * Default constructor
      */
     private Modelo() {
+    	pb = ProductBacklog.getInstance();
+    	sb = new SprintBacklog();
+    	formersb = new ArrayList<SprintBacklog>();
+    	miembros = new HashMap<String,MiembroDeEquipo>();
+    	requisitos = new HashMap<Integer,Requisito>();
+    	db = CSV.getInstance();
     	
     }
     
