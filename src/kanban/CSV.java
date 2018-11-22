@@ -2,7 +2,9 @@
 package kanban;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
+
 
 /**
  * 
@@ -60,9 +62,24 @@ public class CSV implements Datos {
 	}
 
 	@Override
-	public MiembroDeEquipo insertUsuario(MiembroDeEquipo miembroDeEquipo) {
+	public boolean insertUsuario(MiembroDeEquipo miembroDeEquipo) {
 		// TODO Auto-generated method stub
-		return null;
+		String linea = miembroDeEquipo.getNombre()+','+miembroDeEquipo.getApellido()+','+miembroDeEquipo.getDni()+','+miembroDeEquipo.getTlf()+','+miembroDeEquipo.getNick();
+		Collection <MiembroDeEquipo> enFichero=this.selectMiembrosDeEquipo().values();
+		FileWriter fichero = null;
+		
+		try {
+
+			fichero = new FileWriter("csv/MiembroDeEquipo.csv");
+			fichero.write("\n");
+			for(MiembroDeEquipo i:enFichero)
+				fichero.write(i.getNombre()+','+i.getApellido()+','+i.getDni() +i.getTlf()+','+i.getNick()+ "\n");
+			fichero.write(linea + "\n");
+			fichero.close();
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -74,7 +91,8 @@ public class CSV implements Datos {
 
 		try {
 			s = new Scanner(fichero);
-
+			if(s.hasNextLine())
+				s.nextLine();
 			while (s.hasNextLine()) {
 				String linea = s.nextLine();
 				auxLinea = leeLinea(linea);

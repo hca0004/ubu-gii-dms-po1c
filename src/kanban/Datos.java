@@ -23,7 +23,7 @@ public interface Datos {
     public List<SprintBacklog> selectSprintBacklog();
     public SprintBacklog selectSprintBacklog(int id);
     
-    public MiembroDeEquipo insertUsuario(MiembroDeEquipo miembroDeEquipo);
+    public boolean insertUsuario(MiembroDeEquipo miembroDeEquipo);
     public HashMap<String,MiembroDeEquipo> selectMiembrosDeEquipo();
 
     public HashMap<Integer,Requisito> selectRequisitos();
