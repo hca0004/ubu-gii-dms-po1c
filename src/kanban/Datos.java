@@ -14,20 +14,18 @@ public interface Datos {
 		return null;
 	}
 	
-    public ProductBacklog selectProductBacklog();
+    public HashMap<Integer,Tarea> selectProductBacklog();
     public boolean updateProductBacklog(ProductBacklog productBacklog);
     
     public SprintBacklog selectSprintBacklogActual();
     public boolean updateSprintBacklogActual(SprintBacklog sprintBacklog);
     
     public List<SprintBacklog> selectSprintBacklog();
-    public SprintBacklog selectSprintBacklog(int id);
+    public boolean updateSprintBacklog(List<SprintBacklog> sprintBacklog);
     
-    public boolean insertUsuario(MiembroDeEquipo miembroDeEquipo);
+    public boolean updateUsuario(HashMap<String,MiembroDeEquipo> miembroDeEquipo);
     public HashMap<String,MiembroDeEquipo> selectMiembrosDeEquipo();
 
     public HashMap<Integer,Requisito> selectRequisitos();
-    public boolean insertRequisito(Requisito requisito);
-    
-    public boolean updateTarea();
+    public boolean updateRequisito(HashMap<Integer, Requisito> requisito);
 }

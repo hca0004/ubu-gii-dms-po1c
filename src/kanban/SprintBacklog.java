@@ -64,4 +64,16 @@ public class SprintBacklog implements Backlog {
     	return todo;
     }
 
+	public HashMap<Integer, Tarea> getDoing() {
+		return doing;
+	}
+
+	public HashMap<Integer, Tarea> getTesting() {
+		return testing;
+	}
+
+	public HashMap<Integer, Tarea> getFinished() {
+		return finished;
+	}
+
 }

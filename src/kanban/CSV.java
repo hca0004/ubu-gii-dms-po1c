@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
 
-
 /**
  * 
  */
@@ -26,55 +25,131 @@ public class CSV implements Datos {
 	}
 
 	@Override
-	public ProductBacklog selectProductBacklog() {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap<Integer,Tarea> selectProductBacklog() {
+		HashMap<Integer,Tarea> r= new HashMap<Integer,Tarea>();
+		HashMap<Integer, Requisito> requisitos=selectRequisitosTareas();
+		ArrayList<ArrayList<String>> todo;
+		HashMap<Integer,Tarea> tareas=new HashMap<Integer,Tarea>();
+		for(Requisito i:requisitos.values())
+			tareas.putAll(i.getTareas());		
+		todo = leerCSV("csv/ProductBacklog.csv");
+		for (ArrayList<String> auxLinea : todo) {
+			r.put(Integer.parseInt(auxLinea.get(0)), tareas.get(Integer.parseInt(auxLinea.get(0))));
+		}
+			
+		return r;
 	}
 
 	@Override
 	public boolean updateProductBacklog(ProductBacklog productBacklog) {
-		// TODO Auto-generated method stub
-		return false;
+		FileWriter fichero = null;
+		try {
+			fichero = new FileWriter("csv/ProductBacklog.csv");
+			fichero.write("\n");
+			for (Integer i : productBacklog.getTareas().keySet())
+				fichero.write(i+ "\n");
+			
+			fichero.close();
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public SprintBacklog selectSprintBacklogActual() {
-		// TODO Auto-generated method stub
-		return null;
+		SprintBacklog r= new SprintBacklog();
+		HashMap<Integer, Requisito> requisitos=selectRequisitosTareas();
+		ArrayList<ArrayList<String>> todo;
+		HashMap<Integer,Tarea> tareas=new HashMap<Integer,Tarea>();
+		for(Requisito i:requisitos.values())
+			tareas.putAll(i.getTareas());		
+		todo = leerCSV("csv/SprintBacklog.csv");
+		for (ArrayList<String> auxLinea : todo) {
+			r.anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
+			switch(Integer.parseInt(auxLinea.get(1))) {
+			case 1:
+				r.moveraDoing(Integer.parseInt(auxLinea.get(0)));
+				break;
+			case 2:
+				r.moveraTesting(Integer.parseInt(auxLinea.get(0)));
+				break;
+			case 3:
+				r.moveraFinished(Integer.parseInt(auxLinea.get(0)));
+				break;
+			default:
+				break;
+			
+			}
+		}
+			
+		return r;
 	}
 
 	@Override
 	public boolean updateSprintBacklogActual(SprintBacklog sprintBacklog) {
-		// TODO Auto-generated method stub
-		return false;
+		FileWriter fichero = null;
+		try {
+			fichero = new FileWriter("csv/ProductBacklog.csv");
+			fichero.write("\n");
+			//for (Integer i : sprintBacklog.getTareas().keySet())
+				//fichero.write(i+ "\n");
+			
+			fichero.close();
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public List<SprintBacklog> selectSprintBacklog() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<SprintBacklog> r= new ArrayList<SprintBacklog>();
+		HashMap<Integer, Requisito> requisitos=selectRequisitosTareas();
+		ArrayList<ArrayList<String>> todo;
+		HashMap<Integer,Tarea> tareas=new HashMap<Integer,Tarea>();
+		int contador=0;
+		for(Requisito i:requisitos.values())
+			tareas.putAll(i.getTareas());		
+		todo = leerCSV("csv/HistorialSprintBacklog.csv");
+		r.add(new SprintBacklog());
+		for (ArrayList<String> auxLinea : todo) {
+			
+			if (auxLinea.size()==1) {
+				r.add(new SprintBacklog());
+				contador++;
+			}else {
+			r.get(contador).anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
+			switch(Integer.parseInt(auxLinea.get(1))) {
+			case 1:
+				r.get(contador).moveraDoing(Integer.parseInt(auxLinea.get(0)));
+				break;
+			case 2:
+				r.get(contador).moveraTesting(Integer.parseInt(auxLinea.get(0)));
+				break;
+			case 3:
+				r.get(contador).moveraFinished(Integer.parseInt(auxLinea.get(0)));
+				break;
+			default:
+				break;
+			
+			}}
+		}
+			
+		return r;
 	}
 
-	@Override
-	public SprintBacklog selectSprintBacklog(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public boolean insertUsuario(MiembroDeEquipo miembroDeEquipo) {
-		// TODO Auto-generated method stub
-		String linea = miembroDeEquipo.getNombre()+','+miembroDeEquipo.getApellido()+','+miembroDeEquipo.getDni()+','+miembroDeEquipo.getTlf()+','+miembroDeEquipo.getNick();
-		Collection <MiembroDeEquipo> enFichero=this.selectMiembrosDeEquipo().values();
+	public boolean updateUsuario(HashMap<String,MiembroDeEquipo> miembroDeEquipo) {		
 		FileWriter fichero = null;
-		
 		try {
-
 			fichero = new FileWriter("csv/MiembroDeEquipo.csv");
 			fichero.write("\n");
-			for(MiembroDeEquipo i:enFichero)
-				fichero.write(i.getNombre()+','+i.getApellido()+','+i.getDni() +i.getTlf()+','+i.getNick()+ "\n");
-			fichero.write(linea + "\n");
+			for (MiembroDeEquipo i : miembroDeEquipo.values())
+				fichero.write(i.getNombre() + ',' + i.getApellido() + ',' + i.getDni() + ',' + i.getTlf() + ','
+						+ i.getNick() + "\n");
+			
 			fichero.close();
 		} catch (Exception ex) {
 			return false;
@@ -84,52 +159,22 @@ public class CSV implements Datos {
 
 	@Override
 	public HashMap<String, MiembroDeEquipo> selectMiembrosDeEquipo() {
-		File fichero = new File("csv/MiembroDeEquipo.csv");
-		Scanner s = null;
-		ArrayList<String> auxLinea;
 		HashMap<String, MiembroDeEquipo> r = new HashMap<String, MiembroDeEquipo>();
-
-		try {
-			s = new Scanner(fichero);
-			if(s.hasNextLine())
-				s.nextLine();
-			while (s.hasNextLine()) {
-				String linea = s.nextLine();
-				auxLinea = leeLinea(linea);
-				System.out.println(auxLinea);
-				r.put(auxLinea.get(4), new MiembroDeEquipo(auxLinea.get(0), auxLinea.get(1), auxLinea.get(2),
-						auxLinea.get(3), auxLinea.get(4)));
-
-			}
-
-		} catch (Exception ex) {
-			System.out.println(ex);
-			r = null;
-		} finally {
-			try {
-				if (s != null)
-					s.close();
-			} catch (Exception ex2) {
-			}
-		}
-
+		ArrayList<ArrayList<String>> todo;
+		todo = leerCSV("csv/MiembroDeEquipo.csv");
+		for (ArrayList<String> auxLinea : todo)
+			r.put(auxLinea.get(4), new MiembroDeEquipo(auxLinea.get(0), auxLinea.get(1), auxLinea.get(2),
+					auxLinea.get(3), auxLinea.get(4)));
 		return r;
 	}
 
 	@Override
 	public HashMap<Integer, Requisito> selectRequisitos() {
-		// TODO Auto-generated method stub
-		return null;
+		return selectRequisitosTareas();
 	}
 
 	@Override
-	public boolean insertRequisito(Requisito requisito) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean updateTarea() {
+	public boolean updateRequisito(HashMap<Integer,Requisito> requisito) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -151,5 +196,66 @@ public class CSV implements Datos {
 		}
 		r.add(aux);
 		return r;
+	}
+
+	private HashMap<Integer, Requisito> selectRequisitosTareas() {
+		ArrayList<ArrayList<String>> todo;
+		HashMap<Integer, Requisito> requisitos;
+		HashMap<String, MiembroDeEquipo> miembros=selectMiembrosDeEquipo();
+		requisitos = selectRequisito();
+		todo = leerCSV("csv/Tarea.csv");
+		for (ArrayList<String> auxLinea : todo) {
+			requisitos.get(Integer.parseInt(auxLinea.get(5))).anadirTarea(Integer.parseInt(auxLinea.get(0)),
+					auxLinea.get(1), auxLinea.get(2), Float.parseFloat(auxLinea.get(3)),
+					Float.parseFloat(auxLinea.get(4)));
+			requisitos.get(Integer.parseInt(auxLinea.get(5))).getTareas().get(Integer.parseInt(auxLinea.get(0))).asignarMiembro(miembros.get(auxLinea.get(6)));;
+		}
+		return requisitos;
+	}
+
+	private HashMap<Integer, Requisito> selectRequisito() {
+		HashMap<Integer, Requisito> r = new HashMap<Integer, Requisito>();
+		ArrayList<ArrayList<String>> todo;
+		todo = leerCSV("csv/HistoriaDeUsuario.csv");
+		for (ArrayList<String> auxLinea : todo)
+			r.put(Integer.parseInt(auxLinea.get(0)),
+					new HistoriaDeUsuario(Integer.parseInt(auxLinea.get(0)), auxLinea.get(1), auxLinea.get(2)));
+		todo = leerCSV("csv/Defecto.csv");
+		for (ArrayList<String> auxLinea : todo)
+			r.put(Integer.parseInt(auxLinea.get(0)),
+					new Defecto(Integer.parseInt(auxLinea.get(0)), auxLinea.get(1), auxLinea.get(2)));
+
+		return r;
+	}
+
+	private ArrayList<ArrayList<String>> leerCSV(String dirF) {
+		File fichero = new File(dirF);
+		Scanner s = null;
+		ArrayList<ArrayList<String>> r = new ArrayList<ArrayList<String>>();
+		try {
+			s = new Scanner(fichero);
+			if (s.hasNextLine())
+				s.nextLine();
+			while (s.hasNextLine()) {
+				String linea = s.nextLine();
+				r.add(leeLinea(linea));
+			}
+		} catch (Exception ex) {
+			System.out.println(ex);
+			r = null;
+		} finally {
+			try {
+				if (s != null)
+					s.close();
+			} catch (Exception ex2) {
+			}
+		}
+		return r;
+	}
+
+	@Override
+	public boolean updateSprintBacklog(List<SprintBacklog> sprintBacklog) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

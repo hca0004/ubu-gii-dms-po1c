@@ -10,7 +10,7 @@ public class HistoriaDeUsuario implements Requisito {
 	private int id;
 	private String titulo;
 	private String descripcion;
-	private List<Tarea> tareas;
+	private HashMap<Integer,Tarea> tareas;
     /**
      * Default constructor
      */
@@ -18,18 +18,18 @@ public class HistoriaDeUsuario implements Requisito {
     	this.id = id;
     	this.titulo = t;
     	this.descripcion = d;
-    	this.tareas = new ArrayList<Tarea>();
+    	this.tareas = new HashMap<Integer,Tarea>();
     }
 
 	@Override
 	public Tarea anadirTarea(int id, String t, String d, float c, float b) {
 		Tarea tar = new Tarea(this,id,t,d,c,b);
-		tareas.add(tar);
+		tareas.put(id,tar);
 		return tar;
 	}
 
 	@Override
-	public List<Tarea> getTareas() {
+	public HashMap<Integer, Tarea> getTareas() {
 		return tareas;
 	}
 
