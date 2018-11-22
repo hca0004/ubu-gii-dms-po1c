@@ -12,7 +12,7 @@ public class Modelo {
 	private SprintBacklog sb;
 	private List<SprintBacklog> formersb;
 	private HashMap<String,MiembroDeEquipo> miembros;
-	private List<Requisito> requisitos;
+	private HashMap<Integer,Requisito> requisitos;
 	private Datos db;
 
 	private static Modelo mod;
