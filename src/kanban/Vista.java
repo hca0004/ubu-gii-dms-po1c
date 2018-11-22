@@ -9,12 +9,13 @@ public class Vista {
 
 	Scanner scanner;
 	Modelo m;
+
 	/**
 	 * Default constructor
 	 */
 	private Vista() {
-		 scanner = new Scanner(System.in);
-		 m = Controlador.getInstance().getModelo();
+		scanner = new Scanner(System.in);
+		m = Controlador.getInstance().getModelo();
 	}
 
 	public static void main(String[] args) {
@@ -32,11 +33,11 @@ public class Vista {
 		}
 		return i;
 	}
-	
+
 	public String recogerString() {
 		return scanner.nextLine();
 	}
-	
+
 	public Float recogerFloat() {
 		float i = 0;
 		try {
@@ -47,7 +48,7 @@ public class Vista {
 		}
 		return i;
 	}
-	
+
 	public void imprimirMenu() {
 		int i = -1;
 		while (i < 0 || i > 4) {
@@ -63,7 +64,7 @@ public class Vista {
 			System.out.println();
 			i = recogerInt();
 		}
-		switch(i) {
+		switch (i) {
 		case 1:
 			imprimirGestionMiembros();
 			break;
@@ -74,7 +75,7 @@ public class Vista {
 			imprimirNuevaTarea();
 			imprimirMenu();
 			break;
-		case 4: 
+		case 4:
 			imprimirGestionBacklogs();
 			break;
 		default:
@@ -82,78 +83,82 @@ public class Vista {
 			break;
 		}
 	}
-	
+
 	public void imprimirGestionMiembros() {
 		int i = -1;
 		while (i < 0 || i > 2) {
-		System.out.println("----------------------------------------------------");
-		System.out.println("Introduzca el número de la opción que desea realizar");
-		System.out.println();
-		System.out.println("1. Ver miembros del equipo");
-		System.out.println("2. Añadir miembros del equipo");
-		System.out.println("0. Volver al menú principal");
-		System.out.println("----------------------------------------------------");
-		System.out.println();
-		i = recogerInt();
+			System.out.println("----------------------------------------------------");
+			System.out.println("Introduzca el número de la opción que desea realizar");
+			System.out.println();
+			System.out.println("1. Ver miembros del equipo");
+			System.out.println("2. Añadir miembros del equipo");
+			System.out.println("0. Volver al menú principal");
+			System.out.println("----------------------------------------------------");
+			System.out.println();
+			i = recogerInt();
 		}
-		switch(i) {
+		switch (i) {
 		case 1:
+			imprimirMiembros();
+			imprimirEspera();
 			imprimirGestionMiembros();
 			break;
 		case 2:
+			imprimirNuevoMiembro();
+			imprimirEspera();
 			imprimirGestionMiembros();
 			break;
-		default: 
+		default:
 			imprimirMenu();
 			break;
 		}
 	}
-	
+
 	public void imprimirGestionRequisitos() {
 		int i = -1;
 		while (i < 0 || i > 2) {
-		System.out.println("----------------------------------------------------");
-		System.out.println("Introduzca el número de la opción que desea realizar");
-		System.out.println();
-		System.out.println("1. Ver requisitos");
-		System.out.println("2. Añadir requisitos");
-		System.out.println("0. Volver al menú principal");
-		System.out.println("----------------------------------------------------");
-		System.out.println();
-		i = recogerInt();
+			System.out.println("----------------------------------------------------");
+			System.out.println("Introduzca el número de la opción que desea realizar");
+			System.out.println();
+			System.out.println("1. Ver requisitos");
+			System.out.println("2. Añadir requisitos");
+			System.out.println("0. Volver al menú principal");
+			System.out.println("----------------------------------------------------");
+			System.out.println();
+			i = recogerInt();
 		}
-		switch(i) {
+		switch (i) {
 		case 1:
 			imprimirGestionRequisitos();
 			break;
 		case 2:
 			imprimirGestionRequisitos();
 			break;
-		default: 
+		default:
 			imprimirMenu();
 			break;
 		}
 	}
-	
+
 	public void imprimirGestionBacklogs() {
 		int i = -1;
 		while (i < 0 || i > 7) {
-		System.out.println("----------------------------------------------------");
-		System.out.println("Introduzca el número de la opción que desea realizar");
-		System.out.println();
-		System.out.println("1. Ver tareas en Product Backlog");
-		System.out.println("2. Mover tareas de Product Backlog a Sprint Backlog");
-		System.out.println("3. Ver tareas en Sprint Backlog");
-		System.out.println("4. Mover tareas de TODO a DOING");
-		System.out.println("5. Mover tareas de DOING a EVALUATING");
-		System.out.println("6. Mover tareas de EVALUATING A FINISHED");
-		System.out.println("7. Finalizar el Sprint");
-		System.out.println("0. Volver al menú principal");
-		System.out.println("----------------------------------------------------");
-		System.out.println();
-		i = recogerInt();
+			System.out.println("----------------------------------------------------");
+			System.out.println("Introduzca el número de la opción que desea realizar");
+			System.out.println();
+			System.out.println("1. Ver tareas en Product Backlog");
+			System.out.println("2. Mover tareas de Product Backlog a Sprint Backlog");
+			System.out.println("3. Ver tareas en Sprint Backlog");
+			System.out.println("4. Mover tareas de TODO a DOING");
+			System.out.println("5. Mover tareas de DOING a EVALUATING");
+			System.out.println("6. Mover tareas de EVALUATING A FINISHED");
+			System.out.println("7. Finalizar el Sprint");
+			System.out.println("0. Volver al menú principal");
+			System.out.println("----------------------------------------------------");
+			System.out.println();
+			i = recogerInt();
 		}
-		switch(i) {
+		switch (i) {
 		case 1:
 			imprimirGestionBacklogs();
 			break;
@@ -175,17 +180,36 @@ public class Vista {
 		case 7:
 			imprimirGestionBacklogs();
 			break;
-		default: 
+		default:
 			imprimirMenu();
 			break;
 		}
 	}
-	
-	public void imprimirNuevaTarea() {
-		System.out.println("Introduzca una ID de uno de los siguientes requisitos:");
-		for(Requisito r : m.getRequisitos().values()) {
-			System.out.println("ID: "+r.getID()+", Titulo: "+r.getTitulo()+", Descripcion: " + r.getDescripcion());
+
+	public boolean imprimirError() {
+		int i = -1;
+		while (i < 0 || i > 1) {
+			System.out.println("Los datos introducidos son invalidos. \nIntroduzca 0 para salir o 1 para continuar");
+			i = recogerInt();
 		}
+		if (i == 1)
+			return true;
+		return false;
+	}
+
+	public void imprimirEspera() {
+		System.out.println("Pulse enter para continuar");
+		scanner.nextLine();
+	}
+
+	public void imprimirNuevaTarea() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Introduzca una ID de uno de los siguientes requisitos:");
+		for (Requisito r : m.getRequisitos().values()) {
+			System.out.println(
+					"ID: " + r.getID() + ", Titulo: " + r.getTitulo() + ", Descripcion: " + r.getDescripcion());
+		}
+		System.out.println("-------------------------------------------------------");
 		int id = recogerInt();
 		System.out.println("Introduzca el título:");
 		String t = recogerString();
@@ -195,7 +219,25 @@ public class Vista {
 		float c = recogerFloat();
 		System.out.println("Introduzca el beneficio:");
 		float b = recogerFloat();
-		m.nuevaTarea(id, t, d, c, b);
+		if (!m.nuevaTarea(id, t, d, c, b)) {
+			if (imprimirError())
+				imprimirNuevaTarea();
+		}
+
+	}
+
+	public void imprimirMiembros() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Estos son los miembros del equipo:");
+		for (MiembroDeEquipo m : this.m.getMiembros().values()) {
+			System.out.println("Nombre: " + m.getNombre() + ", Apellido: " + m.getApellido() + ", DNI: " + m.getDni()
+					+ ", Tlf: " + m.getTlf() + ", Nick: " + m.getNick());
+		}
+		System.out.println("-------------------------------------------------------");
+	}
+
+	public void imprimirNuevoMiembro() {
+
 	}
 
 }

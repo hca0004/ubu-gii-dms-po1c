@@ -71,7 +71,7 @@ public class Modelo {
 	}
 
 	public boolean nuevaTarea(int id, String t, String d, float c, float b) {
-		if (t.isEmpty())
+		if (t.isEmpty() || !requisitos.containsKey(id))
 			return false;
 		Tarea tarea = requisitos.get(id).anadirTarea(numTareas, t, d, c, b);
 		numTareas++;
@@ -132,6 +132,10 @@ public class Modelo {
 	
 	public HashMap<Integer, Requisito> getRequisitos(){
 		return requisitos;
+	}
+	
+	public HashMap<String, MiembroDeEquipo> getMiembros(){
+		return miembros;
 	}
 
 }
