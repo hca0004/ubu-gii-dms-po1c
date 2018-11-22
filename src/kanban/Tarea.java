@@ -1,52 +1,48 @@
 package kanban;
 
-import java.util.*;
-
 /**
  * 
  */
 public class Tarea {
 
+    
+    public String titulo;
+    public String descripcion;
+    public float coste;
+    public float beneficio;
+    private Requisito requisito;
+    private MiembroDeEquipo miembro;
+    
     /**
      * Default constructor
      */
-    public Tarea() {
+    public Tarea(Requisito r, String t, String d, float c, float b) {
+        this.requisito = r;
+        this.modificarTitulo(t);
+        this.modificarDescripcion(d);
+        this.modificarCoste(c);
+        this.modificarBeneficio(b);
     }
 
-    /**
-     * 
-     */
-    public String titulo;
-
-    /**
-     * 
-     */
-    public String descripcion;
-
-    /**
-     * 
-     */
-    public float coste;
-
-    /**
-     * 
-     */
-    public float beneficio;
-
-
-
-    /**
-     * @param r
-     */
-    public void Tarea(Requisito r) {
-        // TODO implement here
-    }
-
-    /**
-     * @param m
-     */
     public void asignarMiembro(MiembroDeEquipo m) {
-        // TODO implement here
+    	this.miembro = m;
+    }
+    
+    public void modificarTitulo(String t) {
+    	if(!t.isEmpty())
+    		this.titulo=t;
+    }
+    
+    public void modificarDescripcion(String d) {
+    	this.descripcion=d;
+    }
+    
+    public void modificarCoste(float c) {
+    	this.coste=c;
+    }
+    
+    public void modificarBeneficio(float b) {
+    	this.beneficio=b;
     }
 
 }
