@@ -129,9 +129,13 @@ public class Vista {
 		}
 		switch (i) {
 		case 1:
+			imprimirRequisitos();
+			imprimirEspera();
 			imprimirGestionRequisitos();
 			break;
 		case 2:
+			imprimirNuevoRequisito();
+			imprimirEspera();
 			imprimirGestionRequisitos();
 			break;
 		default:
@@ -160,12 +164,18 @@ public class Vista {
 		}
 		switch (i) {
 		case 1:
+			imprimirPB();
+			imprimirEspera();
 			imprimirGestionBacklogs();
 			break;
 		case 2:
+			imprimirMoverAlSB();
+			imprimirEspera();
 			imprimirGestionBacklogs();
 			break;
 		case 3:
+			imprimirSB();
+			imprimirEspera();
 			imprimirGestionBacklogs();
 			break;
 		case 4:
@@ -237,7 +247,109 @@ public class Vista {
 	}
 
 	public void imprimirNuevoMiembro() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Introduzca el nombre:");
+		String n = recogerString();
+		System.out.println("Introduzca el apellido:");
+		String a = recogerString();
+		System.out.println("Introduzca el DNI:");
+		String d = recogerString();
+		System.out.println("Introduzca la tlf:");
+		String t = recogerString();
+		System.out.println("Introduzca el nick:");
+		String nick = recogerString();
+		System.out.println("-------------------------------------------------------");
+		if (!m.nuevoMiembro(n, a, d, t, nick)) {
+			if (imprimirError()) {
+				System.out.println("Pruebe a rellenar todos los datos o a cambiar de nick");
+				imprimirNuevoMiembro();
+			}
+		}
+	}
 
+	public void imprimirRequisitos() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Estos son los requisitos:");
+		for (Requisito r : this.m.getRequisitos().values()) {
+			System.out.println("ID: " + r.getID() + ", Título: " + r.getTitulo() + ", Descripción: "
+					+ r.getDescripcion() + ", Tipo de requisito: " + r.getClass().toString());
+		}
+		System.out.println("-------------------------------------------------------");
+	}
+
+	public void imprimirNuevoRequisito() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Introduzca 1 si quiere crear una Historia de Usuario y 2 si quiere crear un Defecto");
+		int id = recogerInt();
+		System.out.println("Introduzca el título:");
+		String t = recogerString();
+		System.out.println("Introduzca la descripción:");
+		String d = recogerString();
+		System.out.println("-------------------------------------------------------");
+		if (!m.nuevoRequisito(id, t, d)) {
+			if (imprimirError()) {
+				imprimirNuevoRequisito();
+			}
+		}
+	}
+
+	public void imprimirPB() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Estas son las tareas contenidas en el Product Backlog:");
+		for (Tarea t : m.getPB().getTareas().values()) {
+			System.out.print("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
+					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
+					+ ", Miembro asignado: " );
+			if(t.getMiembro()!=null)
+				System.out.println(t.getMiembro().getNick());
+			else
+				System.out.println("-");
+		}
+		System.out.println("-------------------------------------------------------");
+	}
+
+	public void imprimirMoverAlSB() {
+		System.out.println("Introduzca la ID de una de las siguientes tareas");
+		imprimirPB();
+		int id = recogerInt();
+		if (!m.moverTareaPBaSB(id)) {
+			if (imprimirError())
+				imprimirMoverAlSB();
+		}
+	}
+	
+	public void imprimirSB() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Estas son las tareas contenidas en el Sprint Backlog:");
+		System.out.println("En TO DO:");
+		for (Tarea t : m.getSB().getTareasTodo().values()) {
+			System.out.print("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
+					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
+					+ ", Miembro asignado: ");
+			if(t.getMiembro()!=null)
+				System.out.println(t.getMiembro().getNick());
+			else
+				System.out.println("-");
+		}
+		System.out.println("En DOING:");
+		for (Tarea t : m.getSB().getDoing().values()) {
+			System.out.println("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
+					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
+					+ ", Miembro asignado: " + t.getMiembro().getNick());
+		}
+		System.out.println("En TESTING:");
+		for (Tarea t : m.getSB().getTesting().values()) {
+			System.out.println("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
+					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
+					+ ", Miembro asignado: " + t.getMiembro().getNick());
+		}
+		System.out.println("En FINISHED:");
+		for (Tarea t : m.getSB().getFinished().values()) {
+			System.out.println("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
+					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
+					+ ", Miembro asignado: " + t.getMiembro().getNick());
+		}
+		System.out.println("-------------------------------------------------------");
 	}
 
 }

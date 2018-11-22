@@ -11,7 +11,7 @@ public class Tarea {
     private float coste;
     private float beneficio;
     private Requisito requisito;
-    private MiembroDeEquipo miembro;
+    private MiembroDeEquipo miembro = null;
     
     /**
      * Default constructor
@@ -26,8 +26,7 @@ public class Tarea {
     }
 
     public void asignarMiembro(MiembroDeEquipo m) {
-    	if(miembro == null)
-    		this.miembro = m;
+    	this.miembro = m;
     }
     
     public void modificarTitulo(String t) {
@@ -49,6 +48,22 @@ public class Tarea {
     
     public int getID() {
     	return id;
+    }
+    
+    public String getTitulo() {
+    	return titulo;
+    }
+    
+    public String getDescripcion() {
+    	return descripcion;
+    }
+    
+    public float getCoste() {
+    	return coste;
+    }
+    
+    public float getBeneficio() {
+    	return beneficio;
     }
     
     public MiembroDeEquipo getMiembro() {

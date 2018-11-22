@@ -40,7 +40,7 @@ public class Modelo {
 	}
 
 	public boolean nuevoMiembro(String n, String a, String d, String t, String nick) {
-		if (n.isEmpty() || a.isEmpty() || d.isEmpty() || t.isEmpty() || nick.isEmpty())
+		if (miembros.containsKey(nick) || n.isEmpty() || a.isEmpty() || d.isEmpty() || t.isEmpty() || nick.isEmpty())
 			return false;
 		MiembroDeEquipo miembro = new MiembroDeEquipo(n, a, d, t, nick);
 		miembros.put(nick, miembro);
@@ -136,6 +136,14 @@ public class Modelo {
 	
 	public HashMap<String, MiembroDeEquipo> getMiembros(){
 		return miembros;
+	}
+	
+	public ProductBacklog getPB() {
+		return pb;
+	}
+	
+	public SprintBacklog getSB() {
+		return sb;
 	}
 
 }
