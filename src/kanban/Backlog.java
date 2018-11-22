@@ -1,17 +1,9 @@
 package kanban;
 
-import java.util.*;
-
 /**
  * 
  */
-public class Backlog {
-
-    /**
-     * Default constructor
-     */
-    public Backlog() {
-    }
-
-
+public interface Backlog {
+	
+	public void anadirTarea(Tarea t);
 }

@@ -47,8 +47,8 @@ public class Modelo {
     
     public void moverTareaTodoDoing() {}
     
-    public void moverTareaDoingQA() {}
+    public void moverTareaDoingTesting() {}
     
-    public void moverTareaQAFinished() {}
+    public void moverTareaTestingFinished() {}
     
 }
