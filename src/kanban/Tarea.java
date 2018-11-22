@@ -5,7 +5,7 @@ package kanban;
  */
 public class Tarea {
 
-    
+    public int id;
     public String titulo;
     public String descripcion;
     public float coste;
@@ -16,8 +16,9 @@ public class Tarea {
     /**
      * Default constructor
      */
-    public Tarea(Requisito r, String t, String d, float c, float b) {
+    public Tarea(Requisito r,int id ,String t, String d, float c, float b) {
         this.requisito = r;
+        this.id = id;
         this.modificarTitulo(t);
         this.modificarDescripcion(d);
         this.modificarCoste(c);
