@@ -7,33 +7,50 @@ import java.util.*;
  */
 public class Vista {
 
+	Scanner scanner;
+	Modelo m;
 	/**
 	 * Default constructor
 	 */
-	public Vista() {
+	private Vista() {
+		 scanner = new Scanner(System.in);
+		 m = Controlador.getInstance().getModelo();
 	}
 
 	public static void main(String[] args) {
-		Controlador c = Controlador.getInstance();
 		Vista v = new Vista();
-		v.imprimirMenu(c);
+		v.imprimirMenu();
 	}
 
 	public int recogerInt() {
 		int i;
-		Scanner scanner = new Scanner(System.in);
 		try {
-			i = scanner.nextInt();
-		} catch (InputMismatchException e) {
+			i = Integer.parseInt(scanner.nextLine());
+		} catch (NumberFormatException e) {
 			System.out.println("Introduzca números enteros");
-			i = -1;
+			return -1;
 		}
-		scanner.close();
 		return i;
 	}
-	public void imprimirMenu(Controlador c) {
+	
+	public String recogerString() {
+		return scanner.nextLine();
+	}
+	
+	public Float recogerFloat() {
+		float i = 0;
+		try {
+			i = Float.parseFloat(scanner.nextLine());
+		} catch (NumberFormatException e) {
+			System.out.println("Introduzca números enteros");
+			return i;
+		}
+		return i;
+	}
+	
+	public void imprimirMenu() {
 		int i = -1;
-		while (i < 0 && i > 4) {
+		while (i < 0 || i > 4) {
 			System.out.println("----------------------------------------------------");
 			System.out.println("Introduzca el número de la opción que desea realizar");
 			System.out.println();
@@ -48,22 +65,27 @@ public class Vista {
 		}
 		switch(i) {
 		case 1:
+			imprimirGestionMiembros();
 			break;
 		case 2:
+			imprimirGestionRequisitos();
 			break;
 		case 3:
-			imprimirMenu(c);
+			imprimirNuevaTarea();
+			imprimirMenu();
 			break;
 		case 4: 
+			imprimirGestionBacklogs();
 			break;
 		default:
+			scanner.close();
 			break;
 		}
 	}
 	
-	public void imprimirGestionMiembros(Controlador c) {
+	public void imprimirGestionMiembros() {
 		int i = -1;
-		while (i < 0 && i > 2) {
+		while (i < 0 || i > 2) {
 		System.out.println("----------------------------------------------------");
 		System.out.println("Introduzca el número de la opción que desea realizar");
 		System.out.println();
@@ -76,20 +98,20 @@ public class Vista {
 		}
 		switch(i) {
 		case 1:
-			imprimirGestionMiembros(c);
+			imprimirGestionMiembros();
 			break;
 		case 2:
-			imprimirGestionMiembros(c);
+			imprimirGestionMiembros();
 			break;
 		default: 
-			imprimirMenu(c);
+			imprimirMenu();
 			break;
 		}
 	}
 	
-	public void imprimirGestionRequisitos(Controlador c) {
+	public void imprimirGestionRequisitos() {
 		int i = -1;
-		while (i < 0 && i > 2) {
+		while (i < 0 || i > 2) {
 		System.out.println("----------------------------------------------------");
 		System.out.println("Introduzca el número de la opción que desea realizar");
 		System.out.println();
@@ -102,20 +124,20 @@ public class Vista {
 		}
 		switch(i) {
 		case 1:
-			imprimirGestionRequisitos(c);
+			imprimirGestionRequisitos();
 			break;
 		case 2:
-			imprimirGestionRequisitos(c);
+			imprimirGestionRequisitos();
 			break;
 		default: 
-			imprimirMenu(c);
+			imprimirMenu();
 			break;
 		}
 	}
 	
-	public void imprimirGestionBacklogs(Controlador c) {
+	public void imprimirGestionBacklogs() {
 		int i = -1;
-		while (i < 0 && i > 7) {
+		while (i < 0 || i > 7) {
 		System.out.println("----------------------------------------------------");
 		System.out.println("Introduzca el número de la opción que desea realizar");
 		System.out.println();
@@ -133,30 +155,47 @@ public class Vista {
 		}
 		switch(i) {
 		case 1:
-			imprimirGestionBacklogs(c);
+			imprimirGestionBacklogs();
 			break;
 		case 2:
-			imprimirGestionBacklogs(c);
+			imprimirGestionBacklogs();
 			break;
 		case 3:
-			imprimirGestionBacklogs(c);
+			imprimirGestionBacklogs();
 			break;
 		case 4:
-			imprimirGestionBacklogs(c);
+			imprimirGestionBacklogs();
 			break;
 		case 5:
-			imprimirGestionBacklogs(c);
+			imprimirGestionBacklogs();
 			break;
 		case 6:
-			imprimirGestionBacklogs(c);
+			imprimirGestionBacklogs();
 			break;
 		case 7:
-			imprimirGestionBacklogs(c);
+			imprimirGestionBacklogs();
 			break;
 		default: 
-			imprimirMenu(c);
+			imprimirMenu();
 			break;
 		}
+	}
+	
+	public void imprimirNuevaTarea() {
+		System.out.println("Introduzca una ID de uno de los siguientes requisitos:");
+		for(Requisito r : m.getRequisitos().values()) {
+			System.out.println("ID: "+r.getID()+", Titulo: "+r.getTitulo()+", Descripcion: " + r.getDescripcion());
+		}
+		int id = recogerInt();
+		System.out.println("Introduzca el título:");
+		String t = recogerString();
+		System.out.println("Introduzca la descripción:");
+		String d = recogerString();
+		System.out.println("Introduzca el coste:");
+		float c = recogerFloat();
+		System.out.println("Introduzca el beneficio:");
+		float b = recogerFloat();
+		m.nuevaTarea(id, t, d, c, b);
 	}
 
 }

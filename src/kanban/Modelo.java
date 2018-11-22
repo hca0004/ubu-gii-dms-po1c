@@ -129,5 +129,9 @@ public class Modelo {
 	public boolean moverTareaTestingFinished(int idTarea) {
 		return sb.moveraFinished(idTarea);
 	}
+	
+	public HashMap<Integer, Requisito> getRequisitos(){
+		return requisitos;
+	}
 
 }

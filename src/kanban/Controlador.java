@@ -19,5 +19,9 @@ public class Controlador {
     		c = new Controlador();
     	return c;
     }
+    
+    public Modelo getModelo() {
+    	return m;
+    }
 
 }

@@ -32,5 +32,20 @@ public class Defecto implements Requisito {
 	public HashMap<Integer, Tarea> getTareas() {
 		return tareas;
 	}
+	
+	@Override
+	public Integer getID() {
+		return id;
+	}
+
+	@Override
+	public String getTitulo() {
+		return titulo;
+	}
+
+	@Override
+	public String getDescripcion() {
+		return descripcion;
+	}
 
 }
