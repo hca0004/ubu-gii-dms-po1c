@@ -92,8 +92,8 @@ public class CSV implements Datos {
 		try {
 			fichero = new FileWriter("csv/ProductBacklog.csv");
 			fichero.write("\n");
-			//for (Integer i : sprintBacklog.getTareas().keySet())
-				//fichero.write(i+ "\n");
+			for (Tarea i : sprintBacklog.getTareasTodo().values())
+				fichero.write(i+ "\n");
 			
 			fichero.close();
 		} catch (Exception ex) {
