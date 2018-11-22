@@ -11,7 +11,7 @@ public class Modelo {
 	private ProductBacklog pb;
 	private SprintBacklog sb;
 	private List<SprintBacklog> formersb;
-	private List<MiembroDeEquipo> miembros;
+	private HashMap<String,MiembroDeEquipo> miembros;
 	private List<Requisito> requisitos;
 	private Datos db;
 
