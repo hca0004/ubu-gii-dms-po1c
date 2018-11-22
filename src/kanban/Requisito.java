@@ -1,17 +1,10 @@
 package kanban;
 
-import java.util.*;
-
 /**
  * 
  */
-public class Requisito {
-
-    /**
-     * Default constructor
-     */
-    public Requisito() {
-    }
-
-
+public interface Requisito {
+	
+	public Tarea anadirTarea(int id, String t, String d, float c, float b);
+	
 }
