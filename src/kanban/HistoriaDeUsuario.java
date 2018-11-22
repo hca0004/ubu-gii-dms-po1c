@@ -28,4 +28,9 @@ public class HistoriaDeUsuario implements Requisito {
 		return tar;
 	}
 
+	@Override
+	public List<Tarea> getTareas() {
+		return tareas;
+	}
+
 }
