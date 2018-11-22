@@ -24,16 +24,21 @@ public class ProductBacklog implements Backlog {
     
 	@Override
 	public void anadirTarea(Tarea t) {
-		tareas.put(t.id, t);
+		tareas.put(t.getID(), t);
 	}
 	
 	public void anadirConjuntoTareas(HashMap<Integer,Tarea> d) {
 		tareas.putAll(d);
 	}
 	
-	public SprintBacklog moveraSB(SprintBacklog sb,int i) {
-		sb.anadirTarea(tareas.get(i));
+	public SprintBacklog moveraSB(SprintBacklog sb, Tarea t) {
+		sb.anadirTarea(t);
+		tareas.remove(t.getID());
 		return sb;
+	}
+	
+	public HashMap<Integer,Tarea> getTareas(){
+		return tareas;
 	}
 	
 

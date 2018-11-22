@@ -5,11 +5,11 @@ package kanban;
  */
 public class Tarea {
 
-    public int id;
-    public String titulo;
-    public String descripcion;
-    public float coste;
-    public float beneficio;
+	private int id;
+	private String titulo;
+    private String descripcion;
+    private float coste;
+    private float beneficio;
     private Requisito requisito;
     private MiembroDeEquipo miembro;
     
@@ -26,7 +26,8 @@ public class Tarea {
     }
 
     public void asignarMiembro(MiembroDeEquipo m) {
-    	this.miembro = m;
+    	if(miembro == null)
+    		this.miembro = m;
     }
     
     public void modificarTitulo(String t) {
@@ -45,5 +46,13 @@ public class Tarea {
     public void modificarBeneficio(float b) {
     	this.beneficio=b;
     }
-
+    
+    public int getID() {
+    	return id;
+    }
+    
+    public MiembroDeEquipo getMiembro() {
+    	return miembro;
+    }
+    
 }

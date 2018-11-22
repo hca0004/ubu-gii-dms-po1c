@@ -7,10 +7,10 @@ import java.util.*;
  */
 public class HistoriaDeUsuario implements Requisito {
 
-	public int id;
-	public String titulo;
-	public String descripcion;
-	public List<Tarea> tareas;
+	private int id;
+	private String titulo;
+	private String descripcion;
+	private List<Tarea> tareas;
     /**
      * Default constructor
      */

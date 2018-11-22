@@ -11,6 +11,17 @@ public class MiembroDeEquipo {
 	private String tlf;
 	private String nick;
 	
+	/**
+     * Default constructor
+     */
+    public MiembroDeEquipo(String n, String a, String d, String t, String nick) {
+    	this.nombre = n;
+    	this.apellido = a;
+    	this.dni = d;
+    	this.tlf = t;
+    	this.nick = nick;
+    }
+    
     public String getNombre() {
 		return nombre;
 	}
@@ -30,16 +41,5 @@ public class MiembroDeEquipo {
 	public String getNick() {
 		return nick;
 	}
-
-	/**
-     * Default constructor
-     */
-    public MiembroDeEquipo(String n, String a, String d, String t, String nick) {
-    	this.nombre = n;
-    	this.apellido = a;
-    	this.dni = d;
-    	this.tlf = t;
-    	this.nick = nick;
-    }
 
 }

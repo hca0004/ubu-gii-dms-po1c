@@ -23,19 +23,34 @@ public class SprintBacklog implements Backlog {
 
     @Override
 	public void anadirTarea(Tarea t) {
-		todo.put(t.id, t);
+		todo.put(t.getID(), t);
 	}
     
-    public void moveraDoing(int id) {
-    	doing.put(id, todo.get(id));
+    public boolean moveraDoing(int id) {
+    	if(todo.containsKey(id) && todo.get(id).getMiembro()!=null) {
+    		doing.put(id, todo.get(id));
+    		todo.remove(id);
+    		return true;
+    	}
+    	return false;
     }
     
-    public void moveraTesting(int id) {
-    	testing.put(id, doing.get(id));
+    public boolean moveraTesting(int id) {
+    	if(doing.containsKey(id)) {
+    		testing.put(id, doing.get(id));
+    		doing.remove(id);
+    		return true;
+    	}
+    	return false;
     }
     
-    public void moveraFinished(int id) {
-    	finished.put(id, testing.get(id));
+    public boolean moveraFinished(int id) {
+    	if(testing.containsKey(id)) {
+    		finished.put(id, testing.get(id));
+    		testing.remove(id);
+    		return true;
+    	}
+    	return false;
     }
 
     public ProductBacklog finalizarSprint(ProductBacklog pb) {
@@ -43,6 +58,10 @@ public class SprintBacklog implements Backlog {
     	pb.anadirConjuntoTareas(doing);
     	pb.anadirConjuntoTareas(testing);
     	return pb;
+    }
+    
+    public HashMap<Integer,Tarea> getTareasTodo(){
+    	return todo;
     }
 
 }
