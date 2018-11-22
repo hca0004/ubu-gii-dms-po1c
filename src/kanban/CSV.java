@@ -90,10 +90,16 @@ public class CSV implements Datos {
 	public boolean updateSprintBacklogActual(SprintBacklog sprintBacklog) {
 		FileWriter fichero = null;
 		try {
-			fichero = new FileWriter("csv/ProductBacklog.csv");
+			fichero = new FileWriter("csv/SprintBacklog.csv");
 			fichero.write("\n");
 			for (Tarea i : sprintBacklog.getTareasTodo().values())
-				fichero.write(i+ "\n");
+				fichero.write(i.getID()+','+"0"+ "\n");
+			for (Tarea i : sprintBacklog.getDoing().values())
+				fichero.write(i.getID()+','+"1"+ "\n");
+			for (Tarea i : sprintBacklog.getTesting().values())
+				fichero.write(i.getID()+','+"2"+ "\n");
+			for (Tarea i : sprintBacklog.getFinished().values())
+				fichero.write(i.getID()+','+"3"+ "\n");
 			
 			fichero.close();
 		} catch (Exception ex) {
@@ -175,8 +181,27 @@ public class CSV implements Datos {
 
 	@Override
 	public boolean updateRequisito(HashMap<Integer,Requisito> requisito) {
-		// TODO Auto-generated method stub
-		return false;
+		FileWriter fichero = null;
+		try {
+			
+			for (Requisito i : requisito.values()) {
+				if (i instanceof HistoriaDeUsuario) {
+					
+				}else {
+					
+				}
+				
+			}
+			
+			//fichero = new FileWriter("csv/ProductBacklog.csv");
+			//fichero.write("\n");
+				//fichero.write(i+ "\n");
+			
+			fichero.close();
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 
 	private ArrayList<String> leeLinea(String l) {
@@ -255,7 +280,25 @@ public class CSV implements Datos {
 
 	@Override
 	public boolean updateSprintBacklog(List<SprintBacklog> sprintBacklog) {
-		// TODO Auto-generated method stub
-		return false;
+		FileWriter fichero = null;
+		try {
+			fichero = new FileWriter("csv/HistorialSprintBacklog.csv");
+			
+			for(SprintBacklog j:sprintBacklog) {
+				fichero.write("\n");
+			for (Tarea i : j.getTareasTodo().values())
+				fichero.write(i.getID()+','+"0"+ "\n");
+			for (Tarea i : j.getDoing().values())
+				fichero.write(i.getID()+','+"1"+ "\n");
+			for (Tarea i : j.getTesting().values())
+				fichero.write(i.getID()+','+"2"+ "\n");
+			for (Tarea i : j.getFinished().values())
+				fichero.write(i.getID()+','+"3"+ "\n");
+			}			
+			fichero.close();
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 }
