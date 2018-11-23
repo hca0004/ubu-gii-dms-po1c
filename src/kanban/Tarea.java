@@ -25,7 +25,11 @@ public class Tarea {
         this.modificarBeneficio(b);
     }
 
-    public void asignarMiembro(MiembroDeEquipo m) {
+    public Requisito getRequisito() {
+		return requisito;
+	}
+
+	public void asignarMiembro(MiembroDeEquipo m) {
     	this.miembro = m;
     }
     

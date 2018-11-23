@@ -93,16 +93,18 @@ public class CSV implements Datos {
 			fichero = new FileWriter("csv/SprintBacklog.csv");
 			fichero.write("\n");
 			for (Tarea i : sprintBacklog.getTareasTodo().values())
-				fichero.write(i.getID()+','+"0"+ "\n");
+				fichero.write(i.getID()+","+"0"+ "\n");
 			for (Tarea i : sprintBacklog.getDoing().values())
-				fichero.write(i.getID()+','+"1"+ "\n");
+				fichero.write(i.getID()+","+"1"+ "\n");
 			for (Tarea i : sprintBacklog.getTesting().values())
-				fichero.write(i.getID()+','+"2"+ "\n");
+				fichero.write(i.getID()+","+"2"+ "\n");
 			for (Tarea i : sprintBacklog.getFinished().values())
-				fichero.write(i.getID()+','+"3"+ "\n");
+				fichero.write(i.getID()+","+"3"+ "\n");
 			
 			fichero.close();
 		} catch (Exception ex) {
+			
+			System.out.println("petoooooo");
 			return false;
 		}
 		return true;
@@ -153,7 +155,7 @@ public class CSV implements Datos {
 			fichero = new FileWriter("csv/MiembroDeEquipo.csv");
 			fichero.write("\n");
 			for (MiembroDeEquipo i : miembroDeEquipo.values())
-				fichero.write(i.getNombre() + ',' + i.getApellido() + ',' + i.getDni() + ',' + i.getTlf() + ','
+				fichero.write(i.getNombre() + "," + i.getApellido() + "," + i.getDni() + "," + i.getTlf() + ","
 						+ i.getNick() + "\n");
 			
 			fichero.close();
@@ -182,23 +184,53 @@ public class CSV implements Datos {
 	@Override
 	public boolean updateRequisito(HashMap<Integer,Requisito> requisito) {
 		FileWriter fichero = null;
+		HashMap<Integer,Requisito> hdu=new HashMap<Integer,Requisito>();
+		HashMap<Integer,Requisito> defec=new HashMap<Integer,Requisito>();
+		String aux="";
+		ArrayList<String> tarea=new ArrayList<String>();
 		try {
 			
 			for (Requisito i : requisito.values()) {
 				if (i instanceof HistoriaDeUsuario) {
-					
+					hdu.put(i.getID(), i);
 				}else {
-					
-				}
-				
+					defec.put(i.getID(), i);
+				}	
 			}
 			
-			//fichero = new FileWriter("csv/ProductBacklog.csv");
-			//fichero.write("\n");
-				//fichero.write(i+ "\n");
-			
+			fichero = new FileWriter("csv/HistoriaDeUsuario.csv");
+			fichero.write("\n");
+			for(Requisito i:hdu.values()) {
+				for(Tarea j:i.getTareas().values()) {
+					if(j.getMiembro()!=null)
+						tarea.add(j.getID()+","+j.getTitulo()+","+j.getDescripcion()+","+j.getCoste()+","+j.getBeneficio()+","+j.getRequisito().getID()+","+j.getMiembro().getNick());
+					else
+						tarea.add(j.getID()+","+j.getTitulo()+","+j.getDescripcion()+","+j.getCoste()+","+j.getBeneficio()+","+j.getRequisito().getID()+","+-1);	
+				}
+				fichero.write(aux=i.getID()+","+i.getTitulo()+","+i.getDescripcion()+"\n");
+				}
+			fichero.close();
+			fichero = new FileWriter("csv/Defecto.csv");
+			fichero.write("\n");
+			for(Requisito i:defec.values()) {
+				for(Tarea j:i.getTareas().values()) {
+					if(j.getMiembro()!=null)
+					tarea.add(j.getID()+","+j.getTitulo()+","+j.getDescripcion()+","+j.getCoste()+","+j.getBeneficio()+","+j.getRequisito().getID()+","+j.getMiembro().getNick());
+					else
+						tarea.add(j.getID()+","+j.getTitulo()+","+j.getDescripcion()+","+j.getCoste()+","+j.getBeneficio()+","+j.getRequisito().getID()+","+-1);
+				}
+				System.out.println("holaaaa");
+				fichero.write(aux=i.getID()+","+i.getTitulo()+","+i.getDescripcion()+"\n");
+				}
+			fichero.close();
+
+			fichero = new FileWriter("csv/Tarea.csv");
+			fichero.write("\n");
+			for(String i:tarea)
+				fichero.write(i+"\n");
 			fichero.close();
 		} catch (Exception ex) {
+			System.out.println(ex);
 			return false;
 		}
 		return true;
@@ -225,15 +257,20 @@ public class CSV implements Datos {
 
 	private HashMap<Integer, Requisito> selectRequisitosTareas() {
 		ArrayList<ArrayList<String>> todo;
-		HashMap<Integer, Requisito> requisitos;
+		HashMap<Integer, Requisito> requisitos=new HashMap<Integer, Requisito>();
 		HashMap<String, MiembroDeEquipo> miembros=selectMiembrosDeEquipo();
 		requisitos = selectRequisito();
 		todo = leerCSV("csv/Tarea.csv");
 		for (ArrayList<String> auxLinea : todo) {
+			System.out.println(requisitos.get(Integer.parseInt(auxLinea.get(5))));
 			requisitos.get(Integer.parseInt(auxLinea.get(5))).anadirTarea(Integer.parseInt(auxLinea.get(0)),
 					auxLinea.get(1), auxLinea.get(2), Float.parseFloat(auxLinea.get(3)),
 					Float.parseFloat(auxLinea.get(4)));
+			if(Integer.parseInt(auxLinea.get(6))!=-1) {
 			requisitos.get(Integer.parseInt(auxLinea.get(5))).getTareas().get(Integer.parseInt(auxLinea.get(0))).asignarMiembro(miembros.get(auxLinea.get(6)));;
+			}else
+				requisitos.get(Integer.parseInt(auxLinea.get(5)));
+				
 		}
 		return requisitos;
 	}
@@ -287,13 +324,13 @@ public class CSV implements Datos {
 			for(SprintBacklog j:sprintBacklog) {
 				fichero.write("\n");
 			for (Tarea i : j.getTareasTodo().values())
-				fichero.write(i.getID()+','+"0"+ "\n");
+				fichero.write(i.getID()+","+"0"+ "\n");
 			for (Tarea i : j.getDoing().values())
-				fichero.write(i.getID()+','+"1"+ "\n");
+				fichero.write(i.getID()+","+"1"+ "\n");
 			for (Tarea i : j.getTesting().values())
-				fichero.write(i.getID()+','+"2"+ "\n");
+				fichero.write(i.getID()+","+"2"+ "\n");
 			for (Tarea i : j.getFinished().values())
-				fichero.write(i.getID()+','+"3"+ "\n");
+				fichero.write(i.getID()+","+"3"+ "\n");
 			}			
 			fichero.close();
 		} catch (Exception ex) {
