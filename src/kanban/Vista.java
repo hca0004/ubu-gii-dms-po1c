@@ -57,7 +57,7 @@ public class Vista {
 			System.out.println();
 			System.out.println("1. Gestión de miembros del equipo");
 			System.out.println("2. Gestión de requisitos");
-			System.out.println("3. Añadir tareas");
+			System.out.println("3. Gestión de tareas");
 			System.out.println("4. Gestión de backlogs");
 			System.out.println("0. Salir de la aplicación");
 			System.out.println("----------------------------------------------------");
@@ -72,8 +72,7 @@ public class Vista {
 			imprimirGestionRequisitos();
 			break;
 		case 3:
-			imprimirNuevaTarea();
-			imprimirMenu();
+			imprimirGestionTareas();
 			break;
 		case 4:
 			imprimirGestionBacklogs();
@@ -144,6 +143,42 @@ public class Vista {
 		}
 	}
 
+	public void imprimirGestionTareas() {
+		int i = -1;
+		while (i < 0 || i > 3) {
+			System.out.println("----------------------------------------------------");
+			System.out.println("Introduzca el número de la opción que desea realizar");
+			System.out.println();
+			System.out.println("1. Añadir tarea");
+			System.out.println("2. Asignar miembro a una tarea");
+			System.out.println("3. Modificar tarea");
+			System.out.println("0. Volver al menú principal");
+			System.out.println("----------------------------------------------------");
+			System.out.println();
+			i = recogerInt();
+		}
+		switch (i) {
+		case 1:
+			imprimirNuevaTarea();
+			imprimirEspera();
+			imprimirGestionTareas();
+			break;
+		case 2:
+			imprimirAsignarTarea();
+			imprimirEspera();
+			imprimirGestionTareas();
+			break;
+		case 3:
+			imprimirModificarTarea();
+			imprimirEspera();
+			imprimirGestionTareas();
+			break;
+		default:
+			imprimirMenu();
+			break;
+		}
+	}
+
 	public void imprimirGestionBacklogs() {
 		int i = -1;
 		while (i < 0 || i > 7) {
@@ -179,15 +214,20 @@ public class Vista {
 			imprimirGestionBacklogs();
 			break;
 		case 4:
+			imprimirMoverDoing();
 			imprimirGestionBacklogs();
 			break;
 		case 5:
+			imprimirMoverTesting();
 			imprimirGestionBacklogs();
 			break;
 		case 6:
+			imprimirMoverFinished();
 			imprimirGestionBacklogs();
 			break;
 		case 7:
+			imprimirFinalizarSprint();
+			imprimirEspera();
 			imprimirGestionBacklogs();
 			break;
 		default:
@@ -296,60 +336,179 @@ public class Vista {
 	public void imprimirPB() {
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Estas son las tareas contenidas en el Product Backlog:");
-		for (Tarea t : m.getPB().getTareas().values()) {
-			System.out.print("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
-					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
-					+ ", Miembro asignado: " );
-			if(t.getMiembro()!=null)
-				System.out.println(t.getMiembro().getNick());
-			else
-				System.out.println("-");
-		}
+		imprimirTareasPB();
 		System.out.println("-------------------------------------------------------");
 	}
 
 	public void imprimirMoverAlSB() {
+		System.out.println("-------------------------------------------------------");
 		System.out.println("Introduzca la ID de una de las siguientes tareas");
-		imprimirPB();
+		imprimirTareasPB();
+		System.out.println("-------------------------------------------------------");
 		int id = recogerInt();
 		if (!m.moverTareaPBaSB(id)) {
 			if (imprimirError())
 				imprimirMoverAlSB();
 		}
 	}
-	
+
 	public void imprimirSB() {
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Estas son las tareas contenidas en el Sprint Backlog:");
 		System.out.println("En TO DO:");
-		for (Tarea t : m.getSB().getTareasTodo().values()) {
-			System.out.print("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
-					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
-					+ ", Miembro asignado: ");
-			if(t.getMiembro()!=null)
+		imprimirTareasTODO();
+		System.out.println("En DOING:");
+		imprimirTareasDOING();
+		System.out.println("En TESTING:");
+		imprimirTareasTESTING();
+		System.out.println("En FINISHED:");
+		imprimirTareasFINISHED();
+		System.out.println("-------------------------------------------------------");
+	}
+
+	public void imprimirMoverDoing() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Introduzca la ID de una de las tareas contenidas en TO DO:");
+		System.out.println();
+		imprimirTareasTODO();
+		System.out.println("-------------------------------------------------------");
+		int id = recogerInt();
+		if (!m.moverTareaTodoDoing(id)) {
+			if (imprimirError()) {
+				System.out.println("Pruebe a introducir una ID de las mostradas o a seleccionar una tare con un miembro asignado");
+				imprimirMoverDoing();
+			}
+		}
+	}
+
+	public void imprimirMoverTesting() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Introduzca la ID de una de las tareas contenidas en DOING:");
+		System.out.println();
+		imprimirTareasDOING();
+		System.out.println("-------------------------------------------------------");
+		int id = recogerInt();
+		if (!m.moverTareaDoingTesting(id)) {
+			if (imprimirError())
+				imprimirMoverTesting();
+		}
+	}
+
+	public void imprimirMoverFinished() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Introduzca la ID de una de las tareas contenidas en TESTING:");
+		System.out.println();
+		imprimirTareasTESTING();
+		System.out.println("-------------------------------------------------------");
+		int id = recogerInt();
+		if (!m.moverTareaTestingFinished(id)) {
+			if (imprimirError())
+				imprimirMoverFinished();
+		}
+	}
+	
+	public void imprimirFinalizarSprint() {
+		m.finalizarSprintBacklog();
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Se finaliza el sprint backlog");
+		System.out.println("-------------------------------------------------------");
+	}
+	
+	private void imprimirModificarTarea() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Estas son las tareas contenidas en el Product Backlog (0)");
+		imprimirTareasPB();
+		System.out.println("-------------------------------------------------------");
+		System.out.println();
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Estas son las tareas contenidas en TODO (1)");
+		imprimirTareasTODO();
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Introduzca 0 si la tarea está en el PB, o introduzca 1 si está en el TODO");
+		int backlog = recogerInt();
+		System.out.println("Introduzca la ID de la tarea");
+		int id = recogerInt();
+		System.out.println("Introduzca el nuevo título:");
+		String t = recogerString();
+		System.out.println("Introduzca la nuevo descripción:");
+		String d = recogerString();
+		System.out.println("Introduzca el nuevo coste:");
+		float c = recogerFloat();
+		System.out.println("Introduzca el nuevo beneficio:");
+		float b = recogerFloat();
+		if (!m.modificarTarea(backlog, id, t, d, c, b)) {
+			if (imprimirError())
+				imprimirModificarTarea();
+		}
+	}
+
+	private void imprimirAsignarTarea() {
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Estas son las tareas contenidas en el Product Backlog (0)");
+		imprimirTareasPB();
+		System.out.println("-------------------------------------------------------");
+		System.out.println();
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Estas son las tareas contenidas en TODO (1)");
+		imprimirTareasTODO();
+		System.out.println("-------------------------------------------------------");
+		System.out.println("Introduzca 0 si la tarea está en el PB, o introduzca 1 si está en el TODO");
+		int backlog = recogerInt();
+		System.out.println("Introduzca la ID de la tarea");
+		int id = recogerInt();
+		imprimirMiembros();
+		System.out.println("Introduzca el nick del miembro del equipo a seleccionar:");
+		String nick = recogerString();
+		if (!m.asignarMiembroTarea(backlog, id, nick)) {
+			if (imprimirError())
+				imprimirAsignarTarea();
+		}
+	}
+	
+	private void imprimirTareasPB() {
+		for (Tarea t : m.getPB().getTareas().values()) {
+			System.out.print("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: " + t.getDescripcion()
+					+ ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio() + ", Miembro asignado: ");
+			if (t.getMiembro() != null)
 				System.out.println(t.getMiembro().getNick());
 			else
 				System.out.println("-");
 		}
-		System.out.println("En DOING:");
+	}
+	
+	private void imprimirTareasTODO() {
+		for (Tarea t : m.getSB().getTareasTodo().values()) {
+			System.out.print("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: " + t.getDescripcion()
+					+ ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio() + ", Miembro asignado: ");
+			if (t.getMiembro() != null)
+				System.out.println(t.getMiembro().getNick());
+			else
+				System.out.println("-");
+		}
+	}
+	
+	private void imprimirTareasDOING() {
 		for (Tarea t : m.getSB().getDoing().values()) {
 			System.out.println("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
 					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
 					+ ", Miembro asignado: " + t.getMiembro().getNick());
 		}
-		System.out.println("En TESTING:");
+	}
+	
+	private void imprimirTareasTESTING() {
 		for (Tarea t : m.getSB().getTesting().values()) {
 			System.out.println("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
 					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
 					+ ", Miembro asignado: " + t.getMiembro().getNick());
 		}
-		System.out.println("En FINISHED:");
+	}
+	
+	private void imprimirTareasFINISHED() {
 		for (Tarea t : m.getSB().getFinished().values()) {
 			System.out.println("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
 					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
 					+ ", Miembro asignado: " + t.getMiembro().getNick());
 		}
-		System.out.println("-------------------------------------------------------");
 	}
 
 }
