@@ -78,6 +78,7 @@ public class Vista {
 			imprimirGestionBacklogs();
 			break;
 		default:
+			m.guardarDB();
 			scanner.close();
 			break;
 		}

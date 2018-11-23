@@ -21,16 +21,18 @@ public class Modelo {
 	 * Default constructor
 	 */
 	private Modelo() {
-		pb = ProductBacklog.getInstance();
-		sb = new SprintBacklog();
-		formersb = new ArrayList<SprintBacklog>();
-		miembros = new HashMap<String, MiembroDeEquipo>();
-		requisitos = new HashMap<Integer, Requisito>();
 		db = CSV.getInstance();
-		// Esto debe cambiarse cuando se cree la base de datos, de momento se mantiene
-		// así
-		// para realizar pruebas sin la base de datos
+		pb = ProductBacklog.getInstance();
+		pb.anadirConjuntoTareas(db.selectProductBacklog());
+		sb = db.selectSprintBacklogActual();
+		formersb = db.selectSprintBacklog();
+		miembros = db.selectMiembrosDeEquipo();
+		requisitos = db.selectRequisitos();
+		
 		numTareas = 0;
+		for(Integer i : requisitos.keySet()) {
+			numTareas+= requisitos.get(i).getTareas().size();
+		}
 	}
 
 	public static Modelo getInstance() {
@@ -146,4 +148,11 @@ public class Modelo {
 		return sb;
 	}
 
+	public void guardarDB() {
+		db.updateProductBacklog(pb);
+		db.updateSprintBacklogActual(sb);
+		db.updateSprintBacklog(formersb);
+		db.updateUsuario(miembros);
+		db.updateRequisito(requisitos);	
+	}
 }
