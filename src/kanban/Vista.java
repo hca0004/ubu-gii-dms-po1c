@@ -376,7 +376,8 @@ public class Vista {
 		int id = recogerInt();
 		if (!m.moverTareaTodoDoing(id)) {
 			if (imprimirError()) {
-				System.out.println("Pruebe a introducir una ID de las mostradas o a seleccionar una tare con un miembro asignado");
+				System.out.println(
+						"Pruebe a introducir una ID de las mostradas o a seleccionar una tare con un miembro asignado");
 				imprimirMoverDoing();
 			}
 		}
@@ -407,14 +408,14 @@ public class Vista {
 				imprimirMoverFinished();
 		}
 	}
-	
+
 	public void imprimirFinalizarSprint() {
 		m.finalizarSprintBacklog();
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Se finaliza el sprint backlog");
 		System.out.println("-------------------------------------------------------");
 	}
-	
+
 	private void imprimirModificarTarea() {
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Estas son las tareas contenidas en el Product Backlog (0)");
@@ -465,7 +466,7 @@ public class Vista {
 				imprimirAsignarTarea();
 		}
 	}
-	
+
 	private void imprimirTareasPB() {
 		for (Tarea t : m.getPB().getTareas().values()) {
 			System.out.print("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: " + t.getDescripcion()
@@ -476,7 +477,7 @@ public class Vista {
 				System.out.println("-");
 		}
 	}
-	
+
 	private void imprimirTareasTODO() {
 		for (Tarea t : m.getSB().getTareasTodo().values()) {
 			System.out.print("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: " + t.getDescripcion()
@@ -487,7 +488,7 @@ public class Vista {
 				System.out.println("-");
 		}
 	}
-	
+
 	private void imprimirTareasDOING() {
 		for (Tarea t : m.getSB().getDoing().values()) {
 			System.out.println("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
@@ -495,7 +496,7 @@ public class Vista {
 					+ ", Miembro asignado: " + t.getMiembro().getNick());
 		}
 	}
-	
+
 	private void imprimirTareasTESTING() {
 		for (Tarea t : m.getSB().getTesting().values()) {
 			System.out.println("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "
@@ -503,7 +504,7 @@ public class Vista {
 					+ ", Miembro asignado: " + t.getMiembro().getNick());
 		}
 	}
-	
+
 	private void imprimirTareasFINISHED() {
 		for (Tarea t : m.getSB().getFinished().values()) {
 			System.out.println("ID: " + t.getID() + ", Titulo: " + t.getTitulo() + ", Descripcion: "

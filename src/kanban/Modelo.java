@@ -28,10 +28,10 @@ public class Modelo {
 		formersb = db.selectSprintBacklog();
 		miembros = db.selectMiembrosDeEquipo();
 		requisitos = db.selectRequisitos();
-		
+
 		numTareas = 0;
-		for(Integer i : requisitos.keySet()) {
-			numTareas+= requisitos.get(i).getTareas().size();
+		for (Integer i : requisitos.keySet()) {
+			numTareas += requisitos.get(i).getTareas().size();
 		}
 	}
 
@@ -131,19 +131,19 @@ public class Modelo {
 	public boolean moverTareaTestingFinished(int idTarea) {
 		return sb.moveraFinished(idTarea);
 	}
-	
-	public HashMap<Integer, Requisito> getRequisitos(){
+
+	public HashMap<Integer, Requisito> getRequisitos() {
 		return requisitos;
 	}
-	
-	public HashMap<String, MiembroDeEquipo> getMiembros(){
+
+	public HashMap<String, MiembroDeEquipo> getMiembros() {
 		return miembros;
 	}
-	
+
 	public ProductBacklog getPB() {
 		return pb;
 	}
-	
+
 	public SprintBacklog getSB() {
 		return sb;
 	}
@@ -153,6 +153,6 @@ public class Modelo {
 		db.updateSprintBacklogActual(sb);
 		db.updateSprintBacklog(formersb);
 		db.updateUsuario(miembros);
-		db.updateRequisito(requisitos);	
+		db.updateRequisito(requisitos);
 	}
 }
