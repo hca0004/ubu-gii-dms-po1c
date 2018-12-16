@@ -33,12 +33,6 @@ public class ProductBacklog implements Backlog {
 		tareas.putAll(d);
 	}
 	
-	public SprintBacklog moveraSB(SprintBacklog sb, Tarea t) {
-		sb.anadirTarea(t);
-		tareas.remove(t.getID());
-		return sb;
-	}
-	
 	public HashMap<Integer,Tarea> getTareas(){
 		return tareas;
 	}

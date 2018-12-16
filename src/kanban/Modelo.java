@@ -124,7 +124,7 @@ public class Modelo {
 
 	public boolean moverTareaPBaSB(int idTarea) {
 		if (pb.getTareas().containsKey(idTarea)) {
-			this.sb = pb.moveraSB(sb, pb.getTareas().get(idTarea));
+			sb.anadirTarea(pb.getTareas().remove(idTarea));
 			return true;
 		}
 		return false;
