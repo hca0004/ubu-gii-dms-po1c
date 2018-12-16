@@ -1,6 +1,12 @@
-package kanban;
+package Persistencia;
 
 import java.util.*;
+
+import Backlogs.ProductBacklog;
+import Backlogs.SprintBacklog;
+import Miembros.MiembroDeEquipo;
+import Requisitos.Requisito;
+import Tareas.Tarea;
 
 /**
  * 

@@ -2,6 +2,10 @@ package kanban;
 
 import java.util.*;
 
+import Miembros.MiembroDeEquipo;
+import Requisitos.Requisito;
+import Tareas.Tarea;
+
 /**
  * 
  */

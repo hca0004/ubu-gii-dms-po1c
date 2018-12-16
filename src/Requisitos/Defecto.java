@@ -1,6 +1,8 @@
-package kanban;
+package Requisitos;
 
 import java.util.*;
+
+import Tareas.Tarea;
 
 /**
  * 

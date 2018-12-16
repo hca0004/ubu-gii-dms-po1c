@@ -1,4 +1,7 @@
-package kanban;
+package Tareas;
+
+import Miembros.MiembroDeEquipo;
+import Requisitos.Requisito;
 
 /**
  * 
