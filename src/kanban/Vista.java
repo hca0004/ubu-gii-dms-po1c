@@ -19,7 +19,7 @@ public class Vista {
 	 */
 	private Vista() {
 		scanner = new Scanner(System.in);
-		m = Controlador.getInstance().getModelo();
+		m = Modelo.getInstance();
 	}
 
 	public static void main(String[] args) {
