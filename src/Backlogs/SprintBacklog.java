@@ -28,40 +28,6 @@ public class SprintBacklog implements Backlog {
 		todo.put(t.getID(), t);
 	}
     
-    public boolean moveraDoing(int id) {
-    	if(todo.containsKey(id) && todo.get(id).getMiembro()!=null) {
-    		doing.put(id, todo.get(id));
-    		todo.remove(id);
-    		return true;
-    	}
-    	return false;
-    }
-    
-    public boolean moveraTesting(int id) {
-    	if(doing.containsKey(id)) {
-    		testing.put(id, doing.get(id));
-    		doing.remove(id);
-    		return true;
-    	}
-    	return false;
-    }
-    
-    public boolean moveraFinished(int id) {
-    	if(testing.containsKey(id)) {
-    		finished.put(id, testing.get(id));
-    		testing.remove(id);
-    		return true;
-    	}
-    	return false;
-    }
-
-    public ProductBacklog finalizarSprint(ProductBacklog pb) {
-    	pb.anadirConjuntoTareas(todo);
-    	pb.anadirConjuntoTareas(doing);
-    	pb.anadirConjuntoTareas(testing);
-    	return pb;
-    }
-    
     public HashMap<Integer,Tarea> getTareasTodo(){
     	return todo;
     }

@@ -20,6 +20,7 @@ public class Vista {
 	private Vista() {
 		scanner = new Scanner(System.in);
 		m = Modelo.getInstance();
+		m.cargarDB();
 	}
 
 	public static void main(String[] args) {
@@ -378,7 +379,7 @@ public class Vista {
 		imprimirTareasTODO();
 		System.out.println("-------------------------------------------------------");
 		int id = recogerInt();
-		if (!m.moverTareaTodoDoing(id)) {
+		if (!m.moverTareaTodoDoing(m.getFormerSB().size(),id)) {
 			if (imprimirError()) {
 				System.out.println(
 						"Pruebe a introducir una ID de las mostradas o a seleccionar una tare con un miembro asignado");
@@ -394,7 +395,7 @@ public class Vista {
 		imprimirTareasDOING();
 		System.out.println("-------------------------------------------------------");
 		int id = recogerInt();
-		if (!m.moverTareaDoingTesting(id)) {
+		if (!m.moverTareaDoingTesting(m.getFormerSB().size(),id)) {
 			if (imprimirError())
 				imprimirMoverTesting();
 		}
@@ -407,7 +408,7 @@ public class Vista {
 		imprimirTareasTESTING();
 		System.out.println("-------------------------------------------------------");
 		int id = recogerInt();
-		if (!m.moverTareaTestingFinished(id)) {
+		if (!m.moverTareaTestingFinished(m.getFormerSB().size(),id)) {
 			if (imprimirError())
 				imprimirMoverFinished();
 		}

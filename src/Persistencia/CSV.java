@@ -12,6 +12,7 @@ import Requisitos.Defecto;
 import Requisitos.HistoriaDeUsuario;
 import Requisitos.Requisito;
 import Tareas.Tarea;
+import kanban.Modelo;
 
 /**
  * 
@@ -22,6 +23,7 @@ public class CSV implements Datos {
 	 * Default constructor
 	 */
 	private static Datos csv;
+	private Modelo m = Modelo.getInstance();
 
 	private CSV() {
 	}
@@ -77,13 +79,13 @@ public class CSV implements Datos {
 			r.anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
 			switch (Integer.parseInt(auxLinea.get(1))) {
 			case 1:
-				r.moveraDoing(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTodoDoing(m.getFormerSB().size(), Integer.parseInt(auxLinea.get(0)));
 				break;
 			case 2:
-				r.moveraTesting(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaDoingTesting(m.getFormerSB().size(), Integer.parseInt(auxLinea.get(0)));
 				break;
 			case 3:
-				r.moveraFinished(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTestingFinished(m.getFormerSB().size(), Integer.parseInt(auxLinea.get(0)));
 				break;
 			default:
 				break;
@@ -138,13 +140,13 @@ public class CSV implements Datos {
 				r.get(contador).anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
 				switch (Integer.parseInt(auxLinea.get(1))) {
 				case 1:
-					r.get(contador).moveraDoing(Integer.parseInt(auxLinea.get(0)));
+					//r.get(contador).moveraDoing(Integer.parseInt(auxLinea.get(0)));
 					break;
 				case 2:
-					r.get(contador).moveraTesting(Integer.parseInt(auxLinea.get(0)));
+					//r.get(contador).moveraTesting(Integer.parseInt(auxLinea.get(0)));
 					break;
 				case 3:
-					r.get(contador).moveraFinished(Integer.parseInt(auxLinea.get(0)));
+					//r.get(contador).moveraFinished(Integer.parseInt(auxLinea.get(0)));
 					break;
 				default:
 					break;

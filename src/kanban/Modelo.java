@@ -31,11 +31,22 @@ public class Modelo {
 	 * Default constructor
 	 */
 	private Modelo() {
+	}
+
+	public static Modelo getInstance() {
+		if (mod == null)
+			mod = new Modelo();
+		return mod;
+	}
+
+	public void cargarDB() {
 		db = CSV.getInstance();
 		pb = ProductBacklog.getInstance();
 		pb.anadirConjuntoTareas(db.selectProductBacklog());
+		//formersb = 
+		formersb = new ArrayList<SprintBacklog>();
+		db.selectSprintBacklog();
 		sb = db.selectSprintBacklogActual();
-		formersb = db.selectSprintBacklog();
 		miembros = db.selectMiembrosDeEquipo();
 		requisitos = db.selectRequisitos();
 
@@ -43,12 +54,6 @@ public class Modelo {
 		for (Integer i : requisitos.keySet()) {
 			numTareas += requisitos.get(i).getTareas().size();
 		}
-	}
-
-	public static Modelo getInstance() {
-		if (mod == null)
-			mod = new Modelo();
-		return mod;
 	}
 
 	public boolean nuevoMiembro(String n, String a, String d, String t, String nick) {
@@ -76,8 +81,9 @@ public class Modelo {
 	}
 
 	public void finalizarSprintBacklog() {
-		ProductBacklog pb = sb.finalizarSprint(this.pb);
-		this.pb = pb;
+		pb.anadirConjuntoTareas(sb.getTareasTodo());
+		pb.anadirConjuntoTareas(sb.getDoing());
+		pb.anadirConjuntoTareas(sb.getTesting());
 		this.formersb.add(this.sb);
 		this.sb = new SprintBacklog();
 	}
@@ -130,16 +136,43 @@ public class Modelo {
 		return false;
 	}
 
-	public boolean moverTareaTodoDoing(int idTarea) {
-		return sb.moveraDoing(idTarea);
+	public boolean moverTareaTodoDoing(int idSprint, int idTarea) {
+		if (idSprint == formersb.size()) {
+			if (sb.getTareasTodo().containsKey(idTarea)) {
+				sb.getDoing().put(idTarea, sb.getTareasTodo().remove(idTarea));
+				return true;
+			}
+			return false;
+		} else {
+			formersb.get(idSprint).getDoing().put(idTarea, sb.getTareasTodo().remove(idTarea));
+			return true;
+		}
 	}
 
-	public boolean moverTareaDoingTesting(int idTarea) {
-		return sb.moveraTesting(idTarea);
+	public boolean moverTareaDoingTesting(int idSprint, int idTarea) {
+		if (idSprint == formersb.size()) {
+			if (sb.getDoing().containsKey(idTarea)) {
+				sb.getTesting().put(idTarea, sb.getDoing().remove(idTarea));
+				return true;
+			}
+			return false;
+		} else {
+			formersb.get(idSprint).getTesting().put(idTarea, sb.getDoing().remove(idTarea));
+			return true;
+		}
 	}
 
-	public boolean moverTareaTestingFinished(int idTarea) {
-		return sb.moveraFinished(idTarea);
+	public boolean moverTareaTestingFinished(int idSprint, int idTarea) {
+		if (idSprint == formersb.size()) {
+			if (sb.getTesting().containsKey(idTarea)) {
+				sb.getFinished().put(idTarea, sb.getTesting().remove(idTarea));
+				return true;
+			}
+			return false;
+		} else {
+			formersb.get(idSprint).getFinished().put(idTarea, sb.getTesting().remove(idTarea));
+			return true;
+		}
 	}
 
 	public HashMap<Integer, Requisito> getRequisitos() {
@@ -158,10 +191,14 @@ public class Modelo {
 		return sb;
 	}
 
+	public List<SprintBacklog> getFormerSB() {
+		return formersb;
+	}
+
 	public void guardarDB() {
 		db.updateProductBacklog(pb);
-		db.updateSprintBacklogActual(sb);
 		db.updateSprintBacklog(formersb);
+		db.updateSprintBacklogActual(sb);
 		db.updateUsuario(miembros);
 		db.updateRequisito(requisitos);
 	}
