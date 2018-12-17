@@ -267,14 +267,10 @@ public class Vista {
 		}
 		System.out.println("-------------------------------------------------------");
 		int id = recogerInt();
-		System.out.println("Introduzca el título:");
-		String t = recogerString();
-		System.out.println("Introduzca la descripción:");
-		String d = recogerString();
-		System.out.println("Introduzca el coste:");
-		float c = recogerFloat();
-		System.out.println("Introduzca el beneficio:");
-		float b = recogerFloat();
+		String t = imprimirIntTit();
+		String d = imprimirIntDesc();
+		float c = imprimirIntCoste();
+		float b = imprimirIntBenef();
 		if (!m.nuevaTarea(id, t, d, c, b)) {
 			if (imprimirError())
 				imprimirNuevaTarea();
@@ -327,10 +323,8 @@ public class Vista {
 		System.out.println("-------------------------------------------------------");
 		System.out.println("Introduzca 1 si quiere crear una Historia de Usuario y 2 si quiere crear un Defecto");
 		int id = recogerInt();
-		System.out.println("Introduzca el título:");
-		String t = recogerString();
-		System.out.println("Introduzca la descripción:");
-		String d = recogerString();
+		String t = imprimirIntTit();
+		String d = imprimirIntDesc();
 		System.out.println("-------------------------------------------------------");
 		if (!m.nuevoRequisito(id, t, d)) {
 			if (imprimirError()) {
@@ -431,18 +425,12 @@ public class Vista {
 		System.out.println("Estas son las tareas contenidas en TODO (1)");
 		imprimirTareasTODO();
 		System.out.println("-------------------------------------------------------");
-		System.out.println("Introduzca 0 si la tarea está en el PB, o introduzca 1 si está en el TODO");
-		int backlog = recogerInt();
-		System.out.println("Introduzca la ID de la tarea");
-		int id = recogerInt();
-		System.out.println("Introduzca el nuevo título:");
-		String t = recogerString();
-		System.out.println("Introduzca la nuevo descripción:");
-		String d = recogerString();
-		System.out.println("Introduzca el nuevo coste:");
-		float c = recogerFloat();
-		System.out.println("Introduzca el nuevo beneficio:");
-		float b = recogerFloat();
+		int backlog = imprimirIntPBoSB();
+		int id = imprimirIntIDTar();
+		String t = imprimirIntTit();
+		String d = imprimirIntDesc();
+		float c = imprimirIntCoste();
+		float b = imprimirIntBenef();
 		if (!m.modificarTarea(backlog, id, t, d, c, b)) {
 			if (imprimirError())
 				imprimirModificarTarea();
@@ -459,10 +447,8 @@ public class Vista {
 		System.out.println("Estas son las tareas contenidas en TODO (1)");
 		imprimirTareasTODO();
 		System.out.println("-------------------------------------------------------");
-		System.out.println("Introduzca 0 si la tarea está en el PB, o introduzca 1 si está en el TODO");
-		int backlog = recogerInt();
-		System.out.println("Introduzca la ID de la tarea");
-		int id = recogerInt();
+		int backlog = imprimirIntPBoSB();
+		int id = imprimirIntIDTar();
 		imprimirMiembros();
 		System.out.println("Introduzca el nick del miembro del equipo a seleccionar:");
 		String nick = recogerString();
@@ -516,6 +502,36 @@ public class Vista {
 					+ t.getDescripcion() + ", Coste: " + t.getCoste() + ", Beneficio: " + t.getBeneficio()
 					+ ", Miembro asignado: " + t.getMiembro().getNick());
 		}
+	}
+	
+	private int imprimirIntIDTar() {
+		System.out.println("Introduzca la ID de la tarea");
+		return recogerInt();
+	}
+	
+	private int imprimirIntPBoSB() {
+		System.out.println("Introduzca 0 si la tarea está en el PB, o introduzca 1 si está en el TODO");
+		return recogerInt();
+	}
+	
+	private String imprimirIntTit() {
+		System.out.println("Introduzca el título:");
+		return recogerString();
+	}
+	
+	private String imprimirIntDesc() {
+		System.out.println("Introduzca la nuevo descripción:");
+		return recogerString();
+	}
+	
+	private float imprimirIntCoste() {
+		System.out.println("Introduzca el coste:");
+		return recogerFloat();
+	}
+	
+	private float imprimirIntBenef() {
+		System.out.println("Introduzca el nuevo beneficio:");
+		return recogerFloat();
 	}
 
 }

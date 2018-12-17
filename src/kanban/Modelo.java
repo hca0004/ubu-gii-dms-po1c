@@ -142,8 +142,7 @@ public class Modelo {
 	}
 
 	public boolean moverTareaTodoDoing(int idTarea) {
-
-		if (sb.getTareasTodo().containsKey(idTarea)) {
+		if (sb.getTareasTodo().containsKey(idTarea) && sb.getTareasTodo().get(idTarea)!=null) {
 			sb.getDoing().put(idTarea, sb.getTareasTodo().remove(idTarea));
 			return true;
 		}
