@@ -17,9 +17,9 @@ import Tareas.Tarea;
  */
 public class Modelo {
 
-	private ProductBacklog pb;
+	private ProductBacklog pb = ProductBacklog.getInstance();
 	private SprintBacklog sb;
-	private List<SprintBacklog> formersb;
+	private List<SprintBacklog> formersb = new ArrayList<SprintBacklog>();
 	private HashMap<String, MiembroDeEquipo> miembros;
 	private HashMap<Integer, Requisito> requisitos;
 	private Datos db;
@@ -39,18 +39,10 @@ public class Modelo {
 		return mod;
 	}
 
-	public void cargarDB() {
-		db = CSV.getInstance();
-		pb = ProductBacklog.getInstance();
-		pb.anadirConjuntoTareas(db.selectProductBacklog());
-		// formersb =
-		formersb = new ArrayList<SprintBacklog>();
+	public void cargarDB() { 
 		nuevoSB();
-		db.selectSprintBacklog();
-		db.selectSprintBacklogActual();
-		miembros = db.selectMiembrosDeEquipo();
-		requisitos = db.selectRequisitos();
-
+		db = CSV.getInstance();
+		db.cargarDB();
 		numTareas = 0;
 		for (Integer i : requisitos.keySet()) {
 			numTareas += requisitos.get(i).getTareas().size();
@@ -59,6 +51,14 @@ public class Modelo {
 	
 	public void nuevoSB() {
 		this.sb = new SprintBacklog();
+	}
+	
+	public void setMiembros(HashMap<String, MiembroDeEquipo> m) {
+		miembros = m;
+	}
+	
+	public void setRequisitos(HashMap<Integer, Requisito> r) {
+		requisitos = r;
 	}
 
 	public boolean nuevoMiembro(String n, String a, String d, String t, String nick) {
@@ -192,10 +192,6 @@ public class Modelo {
 	}
 
 	public void guardarDB() {
-		db.updateProductBacklog(pb);
-		db.updateSprintBacklog(formersb);
-		db.updateSprintBacklogActual(sb);
-		db.updateUsuario(miembros);
-		db.updateRequisito(requisitos);
+		db.guardarDB();
 	}
 }

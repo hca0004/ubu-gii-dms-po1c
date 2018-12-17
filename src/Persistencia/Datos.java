@@ -20,6 +20,9 @@ public interface Datos {
 		return null;
 	}
 	
+	public void cargarDB();
+	public void guardarDB();
+	
     public HashMap<Integer,Tarea> selectProductBacklog();
     public boolean updateProductBacklog(ProductBacklog productBacklog);
     

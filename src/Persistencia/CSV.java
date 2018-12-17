@@ -35,6 +35,24 @@ public class CSV implements Datos {
 	}
 
 	@Override
+	public void cargarDB() {
+		m.getPB().anadirConjuntoTareas(selectProductBacklog());
+		selectSprintBacklog();
+		selectSprintBacklogActual();
+		m.setMiembros(selectMiembrosDeEquipo());
+		m.setRequisitos(selectRequisitos());
+	}
+	
+	@Override
+	public void guardarDB() {
+		updateProductBacklog(m.getPB());
+		updateSprintBacklog(m.getFormerSB());
+		updateSprintBacklogActual(m.getSB());
+		updateUsuario(m.getMiembros());
+		updateRequisito(m.getRequisitos());
+	}
+	
+	@Override
 	public HashMap<Integer, Tarea> selectProductBacklog() {
 		HashMap<Integer, Tarea> r = new HashMap<Integer, Tarea>();
 		HashMap<Integer, Requisito> requisitos = selectRequisitosTareas();
