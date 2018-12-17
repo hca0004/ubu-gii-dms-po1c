@@ -43,10 +43,11 @@ public class Modelo {
 		db = CSV.getInstance();
 		pb = ProductBacklog.getInstance();
 		pb.anadirConjuntoTareas(db.selectProductBacklog());
-		//formersb = 
+		// formersb =
 		formersb = new ArrayList<SprintBacklog>();
+		nuevoSB();
 		db.selectSprintBacklog();
-		sb = db.selectSprintBacklogActual();
+		db.selectSprintBacklogActual();
 		miembros = db.selectMiembrosDeEquipo();
 		requisitos = db.selectRequisitos();
 
@@ -54,6 +55,10 @@ public class Modelo {
 		for (Integer i : requisitos.keySet()) {
 			numTareas += requisitos.get(i).getTareas().size();
 		}
+	}
+	
+	public void nuevoSB() {
+		this.sb = new SprintBacklog();
 	}
 
 	public boolean nuevoMiembro(String n, String a, String d, String t, String nick) {
@@ -85,7 +90,7 @@ public class Modelo {
 		pb.anadirConjuntoTareas(sb.getDoing());
 		pb.anadirConjuntoTareas(sb.getTesting());
 		this.formersb.add(this.sb);
-		this.sb = new SprintBacklog();
+		nuevoSB();
 	}
 
 	public boolean nuevaTarea(int id, String t, String d, float c, float b) {
@@ -136,43 +141,34 @@ public class Modelo {
 		return false;
 	}
 
-	public boolean moverTareaTodoDoing(int idSprint, int idTarea) {
-		if (idSprint == formersb.size()) {
-			if (sb.getTareasTodo().containsKey(idTarea)) {
-				sb.getDoing().put(idTarea, sb.getTareasTodo().remove(idTarea));
-				return true;
-			}
-			return false;
-		} else {
-			formersb.get(idSprint).getDoing().put(idTarea, sb.getTareasTodo().remove(idTarea));
+	public boolean moverTareaTodoDoing(int idTarea) {
+
+		if (sb.getTareasTodo().containsKey(idTarea)) {
+			sb.getDoing().put(idTarea, sb.getTareasTodo().remove(idTarea));
 			return true;
 		}
+		return false;
+
 	}
 
-	public boolean moverTareaDoingTesting(int idSprint, int idTarea) {
-		if (idSprint == formersb.size()) {
-			if (sb.getDoing().containsKey(idTarea)) {
-				sb.getTesting().put(idTarea, sb.getDoing().remove(idTarea));
-				return true;
-			}
-			return false;
-		} else {
-			formersb.get(idSprint).getTesting().put(idTarea, sb.getDoing().remove(idTarea));
+	public boolean moverTareaDoingTesting(int idTarea) {
+
+		if (sb.getDoing().containsKey(idTarea)) {
+			sb.getTesting().put(idTarea, sb.getDoing().remove(idTarea));
 			return true;
 		}
+		return false;
+
 	}
 
-	public boolean moverTareaTestingFinished(int idSprint, int idTarea) {
-		if (idSprint == formersb.size()) {
-			if (sb.getTesting().containsKey(idTarea)) {
-				sb.getFinished().put(idTarea, sb.getTesting().remove(idTarea));
-				return true;
-			}
-			return false;
-		} else {
-			formersb.get(idSprint).getFinished().put(idTarea, sb.getTesting().remove(idTarea));
+	public boolean moverTareaTestingFinished(int idTarea) {
+
+		if (sb.getTesting().containsKey(idTarea)) {
+			sb.getFinished().put(idTarea, sb.getTesting().remove(idTarea));
 			return true;
 		}
+		return false;
+
 	}
 
 	public HashMap<Integer, Requisito> getRequisitos() {

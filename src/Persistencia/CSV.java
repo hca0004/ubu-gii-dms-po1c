@@ -77,15 +77,19 @@ public class CSV implements Datos {
 		todo = leerCSV("csv/SprintBacklog.csv");
 		for (ArrayList<String> auxLinea : todo) {
 			r.anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
+			m.getSB().anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
 			switch (Integer.parseInt(auxLinea.get(1))) {
 			case 1:
-				m.moverTareaTodoDoing(m.getFormerSB().size(), Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
 				break;
 			case 2:
-				m.moverTareaDoingTesting(m.getFormerSB().size(), Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaDoingTesting(Integer.parseInt(auxLinea.get(0)));
 				break;
 			case 3:
-				m.moverTareaTestingFinished(m.getFormerSB().size(), Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaDoingTesting(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTestingFinished(Integer.parseInt(auxLinea.get(0)));
 				break;
 			default:
 				break;
@@ -134,18 +138,28 @@ public class CSV implements Datos {
 		for (ArrayList<String> auxLinea : todo) {
 
 			if (auxLinea.size() == 1) {
-				r.add(new SprintBacklog());
+				if(contador>0) {
+					m.getFormerSB().add(m.getSB());
+					m.nuevoSB();
+				}
 				contador++;
 			} else {
-				r.get(contador).anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
+				//r.get(contador).anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
+				m.getSB().anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
 				switch (Integer.parseInt(auxLinea.get(1))) {
 				case 1:
+					m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
 					//r.get(contador).moveraDoing(Integer.parseInt(auxLinea.get(0)));
 					break;
 				case 2:
+					m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
+					m.moverTareaDoingTesting(Integer.parseInt(auxLinea.get(0)));
 					//r.get(contador).moveraTesting(Integer.parseInt(auxLinea.get(0)));
 					break;
 				case 3:
+					m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
+					m.moverTareaDoingTesting(Integer.parseInt(auxLinea.get(0)));
+					m.moverTareaTestingFinished(Integer.parseInt(auxLinea.get(0)));
 					//r.get(contador).moveraFinished(Integer.parseInt(auxLinea.get(0)));
 					break;
 				default:
@@ -154,7 +168,8 @@ public class CSV implements Datos {
 				}
 			}
 		}
-
+		m.getFormerSB().add(m.getSB());
+		m.nuevoSB();
 		return r;
 	}
 

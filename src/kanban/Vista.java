@@ -379,7 +379,7 @@ public class Vista {
 		imprimirTareasTODO();
 		System.out.println("-------------------------------------------------------");
 		int id = recogerInt();
-		if (!m.moverTareaTodoDoing(m.getFormerSB().size(),id)) {
+		if (!m.moverTareaTodoDoing(id)) {
 			if (imprimirError()) {
 				System.out.println(
 						"Pruebe a introducir una ID de las mostradas o a seleccionar una tare con un miembro asignado");
@@ -395,7 +395,7 @@ public class Vista {
 		imprimirTareasDOING();
 		System.out.println("-------------------------------------------------------");
 		int id = recogerInt();
-		if (!m.moverTareaDoingTesting(m.getFormerSB().size(),id)) {
+		if (!m.moverTareaDoingTesting(id)) {
 			if (imprimirError())
 				imprimirMoverTesting();
 		}
@@ -408,7 +408,7 @@ public class Vista {
 		imprimirTareasTESTING();
 		System.out.println("-------------------------------------------------------");
 		int id = recogerInt();
-		if (!m.moverTareaTestingFinished(m.getFormerSB().size(),id)) {
+		if (!m.moverTareaTestingFinished(id)) {
 			if (imprimirError())
 				imprimirMoverFinished();
 		}
