@@ -118,7 +118,7 @@ public class CSV implements Datos {
 			fichero.close();
 		} catch (Exception ex) {
 
-			System.out.println("petoooooo");
+			System.out.println("Ha dejado de funcionar");
 			return false;
 		}
 		return true;
