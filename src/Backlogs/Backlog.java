@@ -1,4 +1,6 @@
-package kanban;
+package Backlogs;
+
+import Tareas.Tarea;
 
 /**
  * 

@@ -1,6 +1,8 @@
-package kanban;
+package Backlogs;
 
 import java.util.*;
+
+import Tareas.Tarea;
 
 /**
  * 
@@ -29,12 +31,6 @@ public class ProductBacklog implements Backlog {
 	
 	public void anadirConjuntoTareas(HashMap<Integer,Tarea> d) {
 		tareas.putAll(d);
-	}
-	
-	public SprintBacklog moveraSB(SprintBacklog sb, Tarea t) {
-		sb.anadirTarea(t);
-		tareas.remove(t.getID());
-		return sb;
 	}
 	
 	public HashMap<Integer,Tarea> getTareas(){

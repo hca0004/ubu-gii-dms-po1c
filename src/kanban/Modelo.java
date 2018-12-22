@@ -2,14 +2,24 @@ package kanban;
 
 import java.util.*;
 
+import Backlogs.ProductBacklog;
+import Backlogs.SprintBacklog;
+import Miembros.MiembroDeEquipo;
+import Persistencia.CSV;
+import Persistencia.Datos;
+import Requisitos.Defecto;
+import Requisitos.HistoriaDeUsuario;
+import Requisitos.Requisito;
+import Tareas.Tarea;
+
 /**
  * 
  */
 public class Modelo {
 
-	private ProductBacklog pb;
+	private ProductBacklog pb = ProductBacklog.getInstance();
 	private SprintBacklog sb;
-	private List<SprintBacklog> formersb;
+	private List<SprintBacklog> formersb = new ArrayList<SprintBacklog>();
 	private HashMap<String, MiembroDeEquipo> miembros;
 	private HashMap<Integer, Requisito> requisitos;
 	private Datos db;
@@ -21,24 +31,34 @@ public class Modelo {
 	 * Default constructor
 	 */
 	private Modelo() {
-		db = CSV.getInstance();
-		pb = ProductBacklog.getInstance();
-		pb.anadirConjuntoTareas(db.selectProductBacklog());
-		sb = db.selectSprintBacklogActual();
-		formersb = db.selectSprintBacklog();
-		miembros = db.selectMiembrosDeEquipo();
-		requisitos = db.selectRequisitos();
-		
-		numTareas = 0;
-		for(Integer i : requisitos.keySet()) {
-			numTareas+= requisitos.get(i).getTareas().size();
-		}
 	}
 
 	public static Modelo getInstance() {
 		if (mod == null)
 			mod = new Modelo();
 		return mod;
+	}
+
+	public void cargarDB() { 
+		nuevoSB();
+		db = CSV.getInstance();
+		db.cargarDB();
+		numTareas = 0;
+		for (Integer i : requisitos.keySet()) {
+			numTareas += requisitos.get(i).getTareas().size();
+		}
+	}
+	
+	public void nuevoSB() {
+		this.sb = new SprintBacklog();
+	}
+	
+	public void setMiembros(HashMap<String, MiembroDeEquipo> m) {
+		miembros = m;
+	}
+	
+	public void setRequisitos(HashMap<Integer, Requisito> r) {
+		requisitos = r;
 	}
 
 	public boolean nuevoMiembro(String n, String a, String d, String t, String nick) {
@@ -66,10 +86,11 @@ public class Modelo {
 	}
 
 	public void finalizarSprintBacklog() {
-		ProductBacklog pb = sb.finalizarSprint(this.pb);
-		this.pb = pb;
+		pb.anadirConjuntoTareas(sb.getTareasTodo());
+		pb.anadirConjuntoTareas(sb.getDoing());
+		pb.anadirConjuntoTareas(sb.getTesting());
 		this.formersb.add(this.sb);
-		this.sb = new SprintBacklog();
+		nuevoSB();
 	}
 
 	public boolean nuevaTarea(int id, String t, String d, float c, float b) {
@@ -114,45 +135,62 @@ public class Modelo {
 
 	public boolean moverTareaPBaSB(int idTarea) {
 		if (pb.getTareas().containsKey(idTarea)) {
-			this.sb = pb.moveraSB(sb, pb.getTareas().get(idTarea));
+			sb.anadirTarea(pb.getTareas().remove(idTarea));
 			return true;
 		}
 		return false;
 	}
 
 	public boolean moverTareaTodoDoing(int idTarea) {
-		return sb.moveraDoing(idTarea);
+		if (sb.getTareasTodo().containsKey(idTarea) && sb.getTareasTodo().get(idTarea)!=null) {
+			sb.getDoing().put(idTarea, sb.getTareasTodo().remove(idTarea));
+			return true;
+		}
+		return false;
+
 	}
 
 	public boolean moverTareaDoingTesting(int idTarea) {
-		return sb.moveraTesting(idTarea);
+
+		if (sb.getDoing().containsKey(idTarea)) {
+			sb.getTesting().put(idTarea, sb.getDoing().remove(idTarea));
+			return true;
+		}
+		return false;
+
 	}
 
 	public boolean moverTareaTestingFinished(int idTarea) {
-		return sb.moveraFinished(idTarea);
+
+		if (sb.getTesting().containsKey(idTarea)) {
+			sb.getFinished().put(idTarea, sb.getTesting().remove(idTarea));
+			return true;
+		}
+		return false;
+
 	}
-	
-	public HashMap<Integer, Requisito> getRequisitos(){
+
+	public HashMap<Integer, Requisito> getRequisitos() {
 		return requisitos;
 	}
-	
-	public HashMap<String, MiembroDeEquipo> getMiembros(){
+
+	public HashMap<String, MiembroDeEquipo> getMiembros() {
 		return miembros;
 	}
-	
+
 	public ProductBacklog getPB() {
 		return pb;
 	}
-	
+
 	public SprintBacklog getSB() {
 		return sb;
 	}
 
+	public List<SprintBacklog> getFormerSB() {
+		return formersb;
+	}
+
 	public void guardarDB() {
-		db.updateProductBacklog(pb);
-		db.updateSprintBacklogActual(sb);
-		db.updateSprintBacklog(formersb);
-		db.updateUsuario(miembros);
-		db.updateRequisito(requisitos);	
+		db.guardarDB();
 	}
 }

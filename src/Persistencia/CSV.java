@@ -1,9 +1,18 @@
 
-package kanban;
+package Persistencia;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.util.*;
+
+import Backlogs.ProductBacklog;
+import Backlogs.SprintBacklog;
+import Miembros.MiembroDeEquipo;
+import Requisitos.Defecto;
+import Requisitos.HistoriaDeUsuario;
+import Requisitos.Requisito;
+import Tareas.Tarea;
+import kanban.Modelo;
 
 /**
  * 
@@ -14,6 +23,7 @@ public class CSV implements Datos {
 	 * Default constructor
 	 */
 	private static Datos csv;
+	private Modelo m = Modelo.getInstance();
 
 	private CSV() {
 	}
@@ -24,6 +34,24 @@ public class CSV implements Datos {
 		return csv;
 	}
 
+	@Override
+	public void cargarDB() {
+		m.getPB().anadirConjuntoTareas(selectProductBacklog());
+		selectSprintBacklog();
+		selectSprintBacklogActual();
+		m.setMiembros(selectMiembrosDeEquipo());
+		m.setRequisitos(selectRequisitos());
+	}
+	
+	@Override
+	public void guardarDB() {
+		updateProductBacklog(m.getPB());
+		updateSprintBacklog(m.getFormerSB());
+		updateSprintBacklogActual(m.getSB());
+		updateUsuario(m.getMiembros());
+		updateRequisito(m.getRequisitos());
+	}
+	
 	@Override
 	public HashMap<Integer, Tarea> selectProductBacklog() {
 		HashMap<Integer, Tarea> r = new HashMap<Integer, Tarea>();
@@ -67,15 +95,19 @@ public class CSV implements Datos {
 		todo = leerCSV("csv/SprintBacklog.csv");
 		for (ArrayList<String> auxLinea : todo) {
 			r.anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
+			m.getSB().anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
 			switch (Integer.parseInt(auxLinea.get(1))) {
 			case 1:
-				r.moveraDoing(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
 				break;
 			case 2:
-				r.moveraTesting(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaDoingTesting(Integer.parseInt(auxLinea.get(0)));
 				break;
 			case 3:
-				r.moveraFinished(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaDoingTesting(Integer.parseInt(auxLinea.get(0)));
+				m.moverTareaTestingFinished(Integer.parseInt(auxLinea.get(0)));
 				break;
 			default:
 				break;
@@ -104,7 +136,7 @@ public class CSV implements Datos {
 			fichero.close();
 		} catch (Exception ex) {
 
-			System.out.println("petoooooo");
+			System.out.println("Ha dejado de funcionar");
 			return false;
 		}
 		return true;
@@ -124,19 +156,29 @@ public class CSV implements Datos {
 		for (ArrayList<String> auxLinea : todo) {
 
 			if (auxLinea.size() == 1) {
-				r.add(new SprintBacklog());
+				if(contador>0) {
+					m.getFormerSB().add(m.getSB());
+					m.nuevoSB();
+				}
 				contador++;
 			} else {
-				r.get(contador).anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
+				//r.get(contador).anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
+				m.getSB().anadirTarea(tareas.get(Integer.parseInt(auxLinea.get(0))));
 				switch (Integer.parseInt(auxLinea.get(1))) {
 				case 1:
-					r.get(contador).moveraDoing(Integer.parseInt(auxLinea.get(0)));
+					m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
+					//r.get(contador).moveraDoing(Integer.parseInt(auxLinea.get(0)));
 					break;
 				case 2:
-					r.get(contador).moveraTesting(Integer.parseInt(auxLinea.get(0)));
+					m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
+					m.moverTareaDoingTesting(Integer.parseInt(auxLinea.get(0)));
+					//r.get(contador).moveraTesting(Integer.parseInt(auxLinea.get(0)));
 					break;
 				case 3:
-					r.get(contador).moveraFinished(Integer.parseInt(auxLinea.get(0)));
+					m.moverTareaTodoDoing(Integer.parseInt(auxLinea.get(0)));
+					m.moverTareaDoingTesting(Integer.parseInt(auxLinea.get(0)));
+					m.moverTareaTestingFinished(Integer.parseInt(auxLinea.get(0)));
+					//r.get(contador).moveraFinished(Integer.parseInt(auxLinea.get(0)));
 					break;
 				default:
 					break;
@@ -144,7 +186,8 @@ public class CSV implements Datos {
 				}
 			}
 		}
-
+		m.getFormerSB().add(m.getSB());
+		m.nuevoSB();
 		return r;
 	}
 
