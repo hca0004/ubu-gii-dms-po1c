@@ -7,6 +7,7 @@ import Backlogs.SprintBacklog;
 import Miembros.MiembroDeEquipo;
 import Persistencia.CSV;
 import Persistencia.Datos;
+import Persistencia.SQLite;
 import Requisitos.Defecto;
 import Requisitos.HistoriaDeUsuario;
 import Requisitos.Requisito;
@@ -41,7 +42,7 @@ public class Modelo {
 
 	public void cargarDB() { 
 		nuevoSB();
-		db = CSV.getInstance();
+		db = SQLite.getInstance();
 		db.cargarDB();
 		numTareas = 0;
 		for (Integer i : requisitos.keySet()) {

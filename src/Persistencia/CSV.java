@@ -52,8 +52,8 @@ public class CSV implements Datos {
 		updateRequisito(m.getRequisitos());
 	}
 	
-	@Override
-	public HashMap<Integer, Tarea> selectProductBacklog() {
+	
+	private HashMap<Integer, Tarea> selectProductBacklog() {
 		HashMap<Integer, Tarea> r = new HashMap<Integer, Tarea>();
 		HashMap<Integer, Requisito> requisitos = selectRequisitosTareas();
 		ArrayList<ArrayList<String>> todo;
@@ -68,8 +68,8 @@ public class CSV implements Datos {
 		return r;
 	}
 
-	@Override
-	public boolean updateProductBacklog(ProductBacklog productBacklog) {
+	
+	private boolean updateProductBacklog(ProductBacklog productBacklog) {
 		FileWriter fichero = null;
 		try {
 			fichero = new FileWriter("csv/ProductBacklog.csv");
@@ -84,8 +84,8 @@ public class CSV implements Datos {
 		return true;
 	}
 
-	@Override
-	public SprintBacklog selectSprintBacklogActual() {
+	
+	private SprintBacklog selectSprintBacklogActual() {
 		SprintBacklog r = new SprintBacklog();
 		HashMap<Integer, Requisito> requisitos = selectRequisitosTareas();
 		ArrayList<ArrayList<String>> todo;
@@ -118,8 +118,8 @@ public class CSV implements Datos {
 		return r;
 	}
 
-	@Override
-	public boolean updateSprintBacklogActual(SprintBacklog sprintBacklog) {
+	
+	private boolean updateSprintBacklogActual(SprintBacklog sprintBacklog) {
 		FileWriter fichero = null;
 		try {
 			fichero = new FileWriter("csv/SprintBacklog.csv");
@@ -142,8 +142,8 @@ public class CSV implements Datos {
 		return true;
 	}
 
-	@Override
-	public List<SprintBacklog> selectSprintBacklog() {
+	
+	private List<SprintBacklog> selectSprintBacklog() {
 		ArrayList<SprintBacklog> r = new ArrayList<SprintBacklog>();
 		HashMap<Integer, Requisito> requisitos = selectRequisitosTareas();
 		ArrayList<ArrayList<String>> todo;
@@ -191,8 +191,8 @@ public class CSV implements Datos {
 		return r;
 	}
 
-	@Override
-	public boolean updateUsuario(HashMap<String, MiembroDeEquipo> miembroDeEquipo) {
+	
+	private boolean updateUsuario(HashMap<String, MiembroDeEquipo> miembroDeEquipo) {
 		FileWriter fichero = null;
 		try {
 			fichero = new FileWriter("csv/MiembroDeEquipo.csv");
@@ -208,8 +208,8 @@ public class CSV implements Datos {
 		return true;
 	}
 
-	@Override
-	public HashMap<String, MiembroDeEquipo> selectMiembrosDeEquipo() {
+	
+	private HashMap<String, MiembroDeEquipo> selectMiembrosDeEquipo() {
 		HashMap<String, MiembroDeEquipo> r = new HashMap<String, MiembroDeEquipo>();
 		ArrayList<ArrayList<String>> todo;
 		todo = leerCSV("csv/MiembroDeEquipo.csv");
@@ -219,13 +219,13 @@ public class CSV implements Datos {
 		return r;
 	}
 
-	@Override
-	public HashMap<Integer, Requisito> selectRequisitos() {
+	
+	private HashMap<Integer, Requisito> selectRequisitos() {
 		return selectRequisitosTareas();
 	}
 
-	@Override
-	public boolean updateRequisito(HashMap<Integer, Requisito> requisito) {
+	
+	private boolean updateRequisito(HashMap<Integer, Requisito> requisito) {
 		FileWriter fichero = null;
 		HashMap<Integer, Requisito> hdu = new HashMap<Integer, Requisito>();
 		HashMap<Integer, Requisito> defec = new HashMap<Integer, Requisito>();
@@ -364,8 +364,8 @@ public class CSV implements Datos {
 		return r;
 	}
 
-	@Override
-	public boolean updateSprintBacklog(List<SprintBacklog> sprintBacklog) {
+	
+	private boolean updateSprintBacklog(List<SprintBacklog> sprintBacklog) {
 		FileWriter fichero = null;
 		try {
 			fichero = new FileWriter("csv/HistorialSprintBacklog.csv");
