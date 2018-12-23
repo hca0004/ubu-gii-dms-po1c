@@ -84,15 +84,31 @@ public class SQLite implements Datos {
 					m.getPB().anadirTarea(tarea);
 				else if (e >= 1 && e <= 4) {
 					m.getSB().anadirTarea(tarea);
-					moverTarea(e-1, i);
-				} else {
-					resul2 = executeQuery("Select * from SprintTarea where IDTarea=" + i + ";");
-					while (resul2.next()) {
-						SprintBacklog sprint = m.getFormerSB().get(resul2.getInt("IDSprint"));
+					moverTarea(e - 1, i);
+
+				}
+				resul2 = executeQuery("Select * from SprintTarea where IDTarea=" + i + ";");
+
+				while (resul2.next()) {
+
+					SprintBacklog sprint = m.getFormerSB().get(resul2.getInt("IDSprint"));
+					switch (resul2.getInt("Estado")) {
+					case 0:
 						sprint.anadirTarea(tarea);
-						moverTarea(resul2.getInt("Estado"), i);
+						break;
+					case 1:
+						sprint.getDoing().put(i, tarea);
+
+						break;
+					case 2:
+						sprint.getTesting().put(i, tarea);
+						break;
+					case 3:
+						sprint.getFinished().put(i, tarea);
+						break;
 
 					}
+
 				}
 
 			}
@@ -177,15 +193,14 @@ public class SQLite implements Datos {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return r;
 	}
 
-	
 	private boolean updateRequisito(HashMap<Integer, Requisito> requisito) {
 		String sql;
-		String nic="";
-		int tip, estado;
+		String nic = "";
+		int tip, estado = -1;
 		for (Requisito i : requisito.values()) {
 			if (i instanceof Defecto)
 				tip = 2;
@@ -197,25 +212,22 @@ public class SQLite implements Datos {
 			for (Tarea j : i.getTareas().values()) {
 				if (m.getPB().getTareas().containsKey(j.getID()))
 					estado = 0;
-				else if ( m.getSB().getTareasTodo().containsKey(j.getID()))
-					estado=1;
-				else if(m.getSB().getDoing().containsKey(j.getID()))
-					estado=2;
-				else if( m.getSB().getTesting().containsKey(j.getID()))
-					estado=3;
-				else if( m.getSB().getFinished().containsKey(j.getID()))
+				else if (m.getSB().getTareasTodo().containsKey(j.getID()))
+					estado = 1;
+				else if (m.getSB().getDoing().containsKey(j.getID()))
+					estado = 2;
+				else if (m.getSB().getTesting().containsKey(j.getID()))
+					estado = 3;
+				else if (m.getSB().getFinished().containsKey(j.getID()))
 					estado = 4;
 				else
 					estado = -1;
-				if(j.getMiembro()!=null)
-					nic=j.getMiembro().getNick();
+				if (j.getMiembro() != null)
+					nic = j.getMiembro().getNick();
 				sql = "INSERT INTO Tarea (" + "ID, Titulo, Descripcion,Coste,Beneficio,IDRequisito,IDMiembro, Estado)"
-						+ "Values (" + j.getID() + ",'" + j.getTitulo() + "','" + j.getDescripcion() + "'," + j.getCoste()
-						+ "," + j.getBeneficio() + "," + i.getID() + ",'" + nic + "'," + estado
-						+ ");";
+						+ "Values (" + j.getID() + ",'" + j.getTitulo() + "','" + j.getDescripcion() + "',"
+						+ j.getCoste() + "," + j.getBeneficio() + "," + i.getID() + ",'" + nic + "'," + estado + ");";
 				execute(sql);
-				
-				
 
 			}
 		}
@@ -223,7 +235,7 @@ public class SQLite implements Datos {
 	}
 
 	private boolean dropTables() {
-		
+
 		ArrayList<String> sql = new ArrayList<String>();
 		// MIEMBRO
 		sql.add("DROP TABLE IF EXISTS Miembro;");
@@ -236,7 +248,7 @@ public class SQLite implements Datos {
 				Statement stmt = c.createStatement();
 				stmt.execute(i);
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 
@@ -246,7 +258,7 @@ public class SQLite implements Datos {
 	}
 
 	private boolean createTables() {
-		
+
 		ArrayList<String> sql = new ArrayList<String>();
 		// MIEMBRO
 		sql.add("CREATE TABLE IF NOT EXISTS Miembro (" + "    Nombre varchar(255)," + "    Apellido varchar(255),"
@@ -269,7 +281,7 @@ public class SQLite implements Datos {
 				Statement stmt = c.createStatement();
 				stmt.execute(i);
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 
@@ -282,7 +294,7 @@ public class SQLite implements Datos {
 		ResultSet r;
 		try {
 			Statement stmt = c.createStatement();
-			r=stmt.executeQuery(sql);
+			r = stmt.executeQuery(sql);
 			return r;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -292,11 +304,11 @@ public class SQLite implements Datos {
 	}
 
 	private boolean execute(String sql) {
-		
+
 		try {
 			Statement stmt = c.createStatement();
 			stmt.execute(sql);
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -337,7 +349,6 @@ public class SQLite implements Datos {
 		}
 	}
 
-
 	private void selectSprintBacklog() {
 		ResultSet resul2;
 		resul2 = executeQuery("Select * from SprintHistorico;");
@@ -349,40 +360,35 @@ public class SQLite implements Datos {
 		}
 	}
 
-	
 	private boolean updateSprintBacklog(List<SprintBacklog> sprintBacklog) {
-		int conta=0;
-		for(SprintBacklog sb:sprintBacklog) {
+		int conta = 0;
+		for (SprintBacklog sb : sprintBacklog) {
 			String sql;
-			sql = "INSERT INTO SprintHistorico (" + "ID)"
-					+ "Values (" + conta
-					+ ");";
-			
+			sql = "INSERT INTO SprintHistorico (" + "ID)" + "Values (" + conta + ");";
+
 			execute(sql);
-			for(Tarea t: sb.getTareasTodo().values()) {
-				insertSprintTarea(conta,t.getID(),0);
+			for (Tarea t : sb.getTareasTodo().values()) {
+				insertSprintTarea(conta, t.getID(), 0);
 			}
-			for(Tarea t: sb.getDoing().values()) {
-				insertSprintTarea(conta,t.getID(),1);
+			for (Tarea t : sb.getDoing().values()) {
+				insertSprintTarea(conta, t.getID(), 1);
 			}
-			for(Tarea t: sb.getTesting().values()) {
-				insertSprintTarea(conta,t.getID(),2);
+			for (Tarea t : sb.getTesting().values()) {
+				insertSprintTarea(conta, t.getID(), 2);
 			}
-			for(Tarea t: sb.getFinished().values()) {
-				insertSprintTarea(conta,t.getID(),3);
+			for (Tarea t : sb.getFinished().values()) {
+				insertSprintTarea(conta, t.getID(), 3);
 			}
-			
+			conta++;
 		}
 		return false;
 	}
-	private void insertSprintTarea(int sp,int ta, int es) {
+
+	private void insertSprintTarea(int sp, int ta, int es) {
 		String sql;
-		sql = "INSERT INTO SprintTarea (" + "IDSprint, IDTarea, Estado)"
-				+ "Values (" + sp + "," + ta + "," + es 
-				+ ");";
-		
+		sql = "INSERT INTO SprintTarea (" + "IDSprint, IDTarea, Estado)" + "Values (" + sp + "," + ta + "," + es + ");";
+
 		execute(sql);
 	}
-	
 
 }
