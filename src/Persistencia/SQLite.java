@@ -78,7 +78,7 @@ public class SQLite implements Datos {
 				e = resul.getInt("Estado");
 				tarea = new Tarea(m.getRequisitos().get(idm), i, t, d, c, b);
 				m.getRequisitos().get(idm).getTareas().put(i, tarea);
-				if (idr.compareTo("") == 0)
+				if (idr.compareTo("") != 0)
 					tarea.asignarMiembro(m.getMiembros().get(idr));
 				if (e == 0)
 					m.getPB().anadirTarea(tarea);
@@ -226,11 +226,22 @@ public class SQLite implements Datos {
 		
 		ArrayList<String> sql = new ArrayList<String>();
 		// MIEMBRO
-		sql.add("DROP TABLE IF EXIST Miembro;");
-		sql.add("DROP TABLE IF EXIST Requisito;");
-		sql.add("DROP TABLE IF EXIST Tarea;");
-		sql.add("DROP TABLE IF EXIST SprintHistorico;");
-		sql.add("DROP TABLE IF EXIST SprintTarea;");
+		sql.add("DROP TABLE IF EXISTS Miembro;");
+		sql.add("DROP TABLE IF EXISTS Requisito;");
+		sql.add("DROP TABLE IF EXISTS Tarea;");
+		sql.add("DROP TABLE IF EXISTS SprintHistorico;");
+		sql.add("DROP TABLE IF EXISTS SprintTarea;");
+		try {
+			for (String i : sql) {
+				Statement stmt = c.createStatement();
+				stmt.execute(i);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			return false;
+		}
 		return true;
 	}
 
@@ -315,6 +326,7 @@ public class SQLite implements Datos {
 		c = conectar(dirDB);
 		dropTables();
 		createTables();
+		this.updateUsuario(m.getMiembros());
 		this.updateRequisito(m.getRequisitos());
 		this.updateSprintBacklog(m.getFormerSB());
 		try {
